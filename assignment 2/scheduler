@@ -1,0 +1,19 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+ifstream infile("");
+int main (int argc, char* argv[]) {
+#include <sstream>
+#include <string>
+
+string line;
+while (getline(infile, line))
+{
+    istringstream iss(line);
+    int a, b;
+    cout<<a <<b << iss
+    if (!(iss >> a >> b)) { break; } // error
+
+    cout<< "b: " << b << ", a: "<<a <<\n; 
+}
+}
