@@ -11,4 +11,4 @@ fi
 
 g++ -o scheduler.out *.cpp *.h
 #g++ -o test.out test.cpp
-./scheduler.out $1
+./lab2.out $1 $2
