@@ -8,7 +8,6 @@
 #include <queue>
 #include "Event.h"
 #include "Process.h"
-#include "State.h"
 #include "Rand.h"
 #include "Scheduler.h"
 #include "DES.h"

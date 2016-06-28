@@ -1,15 +1,14 @@
 #ifndef EVENT_H
 #define EVENT_H
 #include "Process.h"
-#include "State.h"
 
 class Event{
 public:
-    Event(int timestamp,Process *process,State oldState, State newState);
+    Event(int timestamp,Process *process,int oldState, int newState);
 	int timestamp;
 	Process *process;
-	State oldState;
-	State newState;
+	int oldState;
+	int newState;
 };
 
 #endif

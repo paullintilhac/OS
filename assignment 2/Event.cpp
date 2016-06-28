@@ -1,5 +1,5 @@
 #include "Event.h"
-Event::Event(int ts,Process *ps,State os,State ns){
+Event::Event(int ts,Process *ps,int os,int ns){
     timestamp = ts;
     process = ps;
     oldState = os;
