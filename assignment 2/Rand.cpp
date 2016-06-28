@@ -19,10 +19,12 @@ Rand::Rand(string randfile){
 	int vec[numCount];
 	string str;
 	for (int i=0;i<numCount;i++){
+	 	getline(randStream,str);
 	    vec[i] = atoi(str.c_str());
 	}
 	this->randVec = vec;
 	this->randCount = 0;
+	randStream.close();
 }
 
 

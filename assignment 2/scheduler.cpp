@@ -10,5 +10,7 @@ Scheduler::add_process(Process *p){
 }
 
 Scheduler::get_next_process(){
-	//tbd
+	//first come, first served
+	this->CURRENT_PROCESS = this->readyQueue.front();
+	this->readyQueue.pop();
 }

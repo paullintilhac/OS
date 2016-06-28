@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 #include "Process.h"
 #include <queue>
 #include <string>
@@ -14,3 +15,5 @@ public:
 	queue<Process*> readyQueue;
 
 };
+
+#endif

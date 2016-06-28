@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROCESS_H
+#define PROCESS_H
+#include "State.h"
 class Process{
 public:
     Process(int AT,int TC, int CB, int IO);
@@ -6,4 +8,6 @@ public:
     int TC;
     int CB;
     int IO;
+    State state;
 };
+#endif

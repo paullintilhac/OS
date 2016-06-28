@@ -1,3 +1,5 @@
+#ifndef RAND_H
+#define RAND_H
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -11,3 +13,5 @@ public:
 	int numRand;
 	int* randVec;
 };
+
+#endif

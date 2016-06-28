@@ -9,6 +9,6 @@ echo $1$a
 exit 1
 fi
 
-g++ -o scheduler.out *.cpp *.h
-#g++ -o test.out test.cpp
+g++ -o lab2.out *.cpp *.h
+chmod +x lab2.out
 ./lab2.out $1 $2
