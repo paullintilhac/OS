@@ -1,5 +1,6 @@
 #include <string>
 #include <list>
+#include <sstream>
 #include "Event.h"
 #include "Process.h"
 #include "Scheduler.h"
@@ -18,6 +19,9 @@ public:
 	Process *CURRENT_RUNNING_PROCESS;
 	Rand* rand;
 	Scheduler* sched;
+	stringstream processSummary;
+	stringstream verboseSummary;
+	stringstream schedulerSummary;
 };
 
 
