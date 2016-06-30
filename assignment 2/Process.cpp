@@ -7,6 +7,7 @@ Process::Process(int a,int t,int c, int i,int prio,int count){
     state ="CREATED";
     timeInPrevState = 0;
     remainingExecTime = TC;
+    remainingCB = 0;
     totalIOTime = 0;
     totalWaitTime =0;
     static_priority = prio;

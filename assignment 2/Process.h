@@ -8,10 +8,12 @@ public:
     int TC;
     int CB;
     int IO;
+    int TT;
     std::string state;
     int timeInPrevState;
     int state_ts;
     int remainingExecTime;
+    int remainingCB;
     int totalIOTime;
     int totalWaitTime;
     int static_priority;

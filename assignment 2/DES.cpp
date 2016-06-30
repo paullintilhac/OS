@@ -7,12 +7,13 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+
 using namespace std;
+
 DES::DES(string originFile, Rand* r,Scheduler* s){
 	ifstream infile (originFile.c_str());
 	string str;
   int pCount=0;
-  cout<<"about to go through while loop"<<endl;
 	while (getline(infile, str)) {
 	     
 	    istringstream iss(str);
@@ -22,10 +23,13 @@ DES::DES(string originFile, Rand* r,Scheduler* s){
 	    	//cout<<"breaking out of while loop \n"; 
 	    	break;
 	    } 
+      if (pCount==0){
+        this->START_TIME = AT;
+      }
       int myRand = r->myrandom(4);
-      //cout<<"myrand: "<<myRand<<endl;
      
 		  Process *p=new Process(AT,TC,CB,IO,myRand,pCount);
+      this->processes.push_back(p);
       stringstream ss;
       ss<<AT<<" "<<pCount<<" "<<p->timeInPrevState<<": CREATED -> READY"<<endl;
       this->verboseSummary<<ss.str();
@@ -37,7 +41,6 @@ DES::DES(string originFile, Rand* r,Scheduler* s){
 	    //cout<<"AT: "<<AT<<", TC: "<<TC<<", CB: "<<CB<<", IO: "<<IO<<endl;
 
 	}
-
     this->rand = r;
     this->sched=s;
     infile.close();
@@ -57,52 +60,48 @@ DES::insert_event(Event e){
   
 }
 
-DES::run_simulation(){
+DES::run_simulation(bool verbose){
+
 int count = 0;
+int finalTime=0;
+int downTime = 0;
 Process* CURRENT_RUNNING_PROCESS =0;
+int ioCount=0;
+int ioTime=0;
 for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
     Process* p = i->process;
     this->CURRENT_TIME = i->timestamp;
-    i->process->timeInPrevState = CURRENT_TIME-i->process->state_ts;
-    i->process->state_ts = this->CURRENT_TIME;
-    if (i->oldState!="CREATED")
-    this->verboseSummary<<CURRENT_TIME<<" "<<p->pCount<<" "<<p->timeInPrevState<<": "<< i->oldState<<" -> "<<i->newState;
+    p->timeInPrevState = CURRENT_TIME-p->state_ts;
+    p->state_ts = this->CURRENT_TIME;
+    
 
     
        //cout<<endl;
         count++;
-        //cout<<"count: "<<(count)<<", old state: "<<i->oldState<<", new state: "<<i->newState<<", process pointer: "<<i->process<<endl;
+        //cout<<"count: "<<(count)<<", old state: "<<i->oldState<<", new state: "<<i->newState<<", process pointer: "<<p<<endl;
     if (i->oldState == "READY"){
-      i->process->totalWaitTime+=i->process->timeInPrevState;
+      p->totalWaitTime+=p->timeInPrevState;
     }
+    //cout<<"remaining CB at top: "<<p->remainingCB<<", timeInPrevState: "<<p->timeInPrevState<<endl;
 
     if (i->oldState == "RUNNG"){
       CURRENT_RUNNING_PROCESS=0;
       sched->CURRENT_PROCESS = 0;
-      i->process->remainingExecTime -= i->process->timeInPrevState;
-      if (i->process->remainingExecTime == 0){
-        stringstream ss;
-        ss << setw(4) << setfill('0') << i->process->pCount;
-        string s = ss.str();        
-        //cout<<"creating process summary"<<endl;
-        stringstream summaryStream;
-        summaryStream<<s<<" "<<i->process->AT<<" "<<i->process->TC<<" "<<i->process->CB<<" "<<i->process->IO<<" "<<i->process->static_priority<<" |  "
-            <<CURRENT_TIME<<" "<<CURRENT_TIME-i->process->AT<<" "<<i->process->totalIOTime<<" "<<i->process->totalWaitTime<<endl;
-        //cout<<"summary string being created: "<<summaryStream.str()<<endl;
-        this->processSummary<<summaryStream.str();
+      p->remainingExecTime -= p->timeInPrevState;
+      p->remainingCB -= p->timeInPrevState;
+      if (p->remainingExecTime == 0){
+        p->TT = CURRENT_TIME;
+        this->verboseSummary<<CURRENT_TIME<<" "<<p->pCount<<" "<<p->timeInPrevState<<": Done"<<endl;
       }
       //cout<<"resetting current running process to "<<CURRENT_RUNNING_PROCESS<<endl;
     }
-
+    if (i->oldState!="CREATED" && p->remainingExecTime!=0)
+      this->verboseSummary<<CURRENT_TIME<<" "<<p->pCount<<" "<<p->timeInPrevState<<": "<< i->oldState<<" -> "<<i->newState;
     if (i->oldState=="BLOCK"){
-      i->process->totalIOTime+=i->process->timeInPrevState;
+      ioCount--;
+      p->totalIOTime+=p->timeInPrevState;
     }
       
-    /*
-     for (EventList::iterator j=this->events.begin();j != this->events.end();++j){
-       cout<<"before deletion event old state: "<< j->oldState<<", event new state: "<<j->newState<<endl;
-       }
-    */
 
     if (count!=1){
     EventList::iterator iLookback = i;
@@ -110,50 +109,54 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
     this->events.erase(iLookback);
     }
 
-    /*
-    cout<<endl;
-      for (EventList::iterator j=this->events.begin();j != this->events.end();++j){
-       cout<<"after deletion event old state: "<< j->oldState<<", event new state: "<<j->newState<<endl;
-       }
-    */
-
+  
     
     //going from created to ready
-    if (i->newState =="READY" && i->process->remainingExecTime>0){
+    if (i->newState =="READY"){
         //cout<<"adding process to run queue"<<endl;
-        sched->add_process(i->process);
-        CALL_SCHEDULER=true;
+        if (p->remainingExecTime>0){
+          sched->add_process(p);
+          CALL_SCHEDULER=true;
+        }
         if (i->oldState!="CREATED")
-        this->verboseSummary<<endl;
+          this->verboseSummary<<endl;
     }
 
     //going from ready to run
     if (i->newState == "RUNNG"){
-        int myRand = rand->myrandom(i->process->CB);
-        if (i->process->remainingExecTime<myRand)
-          myRand = i->process->remainingExecTime;
-        Event runEvent(CURRENT_TIME+myRand,i->process,"RUNNG","BLOCK");
-        this->insert_event(runEvent);
-        //cout<<"inserting run event"<<endl;
+        int myRand = rand->myrandom(p->CB);
+        if (p->remainingCB==0){
+          //cout<<"saving myRandom as remaining CB: "<<myRand<<endl;
+          p->remainingCB = myRand;
+        } else {
+          //cout<<"using remaining time as CB: "<<p->remainingCB<<endl;
+          myRand = p->remainingCB;
+        }
+        if (p->remainingExecTime<myRand)
+          myRand = p->remainingExecTime;
+
+        if (this->sched->quantum<myRand){
+            Event runEvent(CURRENT_TIME+myRand,p,"RUNNG","READY");
+            this->insert_event(runEvent);
+        }
+        else{
+            Event runEvent(CURRENT_TIME+myRand,p,"RUNNG","BLOCK");
+            this->insert_event(runEvent);
+        }
         this->verboseSummary<<" cb="<<myRand<<" rem="<<p->remainingExecTime<<" prio="<<p->dynamic_priority<<endl;
-        //cout<<"CB will last for: "<<myRand<<endl;
-        //create event for either preemption or blocking
     }
 
+
     if (i->newState == "BLOCK"){
-        if (i->process->remainingExecTime==0){
-          //cout<<"execution finished, no new process created"<<endl;
+        if (p->remainingExecTime==0){
+          finalTime = CURRENT_TIME;
         } else {
-          int myRand = rand->myrandom(i->process->IO);
-          //cout<<"IO will last for: "<<myRand<<endl;
-          Event blockEvent(CURRENT_TIME+myRand,i->process,"BLOCK","READY");
+          int myRand = rand->myrandom(p->IO);
+          Event blockEvent(CURRENT_TIME+myRand,p,"BLOCK","READY");
           this->insert_event(blockEvent);
           this->verboseSummary<<" ib="<<myRand<<" rem="<<p->remainingExecTime<<endl;
-
         }
-        //cout<<"inserting block event"<<endl;
-
-        //create an event for when the process becomes ready again
+        ioCount++;
         CALL_SCHEDULER =true;
     }
 
@@ -173,22 +176,44 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
        //cout<<"current running process: "<<CURRENT_RUNNING_PROCESS<<endl;
 
        if (CURRENT_RUNNING_PROCESS==0){
-           //cout<<"no process running, getting next process..."<<endl;
            sched->get_next_process();
            CURRENT_RUNNING_PROCESS = sched->CURRENT_PROCESS;
            if (CURRENT_RUNNING_PROCESS == 0){
+            downTime+=nextTime-CURRENT_TIME;
             continue;
            }
+           Event runEvent(i->timestamp,CURRENT_RUNNING_PROCESS,"READY","RUNNG");
+           this->insert_event(runEvent);
        }
-
-       Event runEvent(i->timestamp,CURRENT_RUNNING_PROCESS,"READY","RUNNG");
+       //cout<<"process remaining cb: "<<p->remainingCB<<endl;
        //cout<<"run event old state: "<< runEvent.oldState<<", run event new state: "<<runEvent.newState<<", process pointer: "<<runEvent.process<<endl;
-      
-
-       this->insert_event(runEvent);
     }
-}     
+    if (ioCount>0){
+      ioTime+=nextTime-CURRENT_TIME;
+    }
+}
+    int avgTT=0;
+    int avgWait=0;
+    for (ProcessList::iterator p = this->processes.begin();p != this->processes.end();++p){
+        avgTT+=(*p)->TT;
+        avgWait+=(*p)->totalWaitTime;
+        stringstream ss;
+        ss << setw(4) << setfill('0') << (*p)->pCount;
+        string s = ss.str();        
+        //cout<<"creating process summary"<<endl;
+        stringstream summaryStream;
+        summaryStream<<s<<" "<<(*p)->AT<<" "<<(*p)->TC<<" "<<(*p)->CB<<" "<<(*p)->IO<<" "<<(*p)->static_priority<<" |  "
+            <<(*p)->TT<<" "<<(*p)->TT-(*p)->AT<<" "<<(*p)->totalIOTime<<" "<<(*p)->totalWaitTime<<endl;
+        //cout<<"summary string being created: "<<summaryStream.str()<<endl;
+        this->processSummary<<summaryStream.str();
+    }
+    avgTT/=this->processes.size();
+    avgWait/=this->processes.size();
+if (verbose){
     cout<<this->verboseSummary.str()<<endl;
-    cout<<this->processSummary.str()<<endl;
-    //cout<<"last event in event queue- oldState: "<<lastEvent->oldState<<", newState: "<<lastEvent->newState<<", process remaining exec time: "<<lastEvent->process->remainingExecTime <<endl;
+}
+    cout<<this->sched->schedulerAlgo<<endl;
+    cout<<this->processSummary.str();
+    printf("SUM: %d %.2lf %.2lf %.2lf %.2lf %.3lf\n",finalTime,((finalTime-this->START_TIME-downTime)/(finalTime-this->START_TIME)),ioTime/(finalTime-this->START_TIME),avgTT,(this->processes.size()/finalTime));
+    //cout<<"SUM: "<<<<" "<<<<" "<<<<" "<<<<" "<<;
 }
