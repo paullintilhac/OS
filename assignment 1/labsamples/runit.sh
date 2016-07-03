@@ -4,8 +4,7 @@
 # Author: Hubertus Franke  (frankeh@nyu.edu)
 OUTDIR=${1:-.}
 shift
-LINKER=${*:-../linker}
-
+LINKER=../link.sh
 echo "linker=<$LINKER> outdir=<$OUTDIR>"
 
 INS="`seq 1 19`" 

@@ -3,7 +3,8 @@
 # Author: Hubertus Franke  (frankeh@cims.nyu.edu)
 OUTDIR=${1:-.}
 shift
-SCHED=${*:-../src/sched}
+ls ../
+SCHED=../sched
 echo "sched=<$SCHED> outdir=<$OUTDIR>"
 
 # if you want -v output  run with ...  ./runit.sh youroutputdir   sched -v 

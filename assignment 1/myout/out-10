@@ -1,0 +1,10 @@
+Symbol Table
+xy=8  
+
+Memory Map
+000: 1004 
+001: 5678 
+002: 2000 Error: z is not defined; zero used
+003: 8002 
+004: 7008 
+

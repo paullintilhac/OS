@@ -12,6 +12,7 @@ public:
     std::string state;
     int timeInPrevState;
     int state_ts;
+    bool active;
     int remainingExecTime;
     int remainingCB;
     int totalIOTime;

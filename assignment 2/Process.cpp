@@ -12,5 +12,6 @@ Process::Process(int a,int t,int c, int i,int prio,int count){
     totalWaitTime =0;
     static_priority = prio;
     dynamic_priority =prio-1;
+    active=true;
     pCount =count;
 }

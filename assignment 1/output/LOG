@@ -1,0 +1,120 @@
+################### input-6##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+9c9
+< 004: 3000 Error: Relative address exceeds module size; zero used
+---
+> 004: 3004 Error: Relative address exceeds module size; zero used
+
+################### input-7##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+6,7c6,7
+< 001: 1004 Error: External address exceeds length of use list; treated as immediate
+< 002: 1222 Error: External address exceeds length of use list; treated as immediate
+---
+> 001: 1004 Error: External address exceeds length of uselist; treated as immediate
+> 002: 1222 Error: External address exceeds length of uselist; treated as immediate
+9c9
+< 004: 3000 Error: Relative address exceeds module size; zero used
+---
+> 004: 3004 Error: Relative address exceeds module size; zero used
+
+################### input-8##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+3,5c3,5
+< 000: 1001 Error: External address exceeds length of use list; treated as immediate
+< 001: 1004 Error: External address exceeds length of use list; treated as immediate
+< 002: 1222 Error: External address exceeds length of use list; treated as immediate
+---
+> 000: 1001 Error: External address exceeds length of uselist; treated as immediate
+> 001: 1004 Error: External address exceeds length of uselist; treated as immediate
+> 002: 1222 Error: External address exceeds length of uselist; treated as immediate
+
+################### input-10##################
+###    Warning Diff:    .....
+0a1
+> Warning: Module 1: xy to big 8 (max=4) assume zero relative
+###    Code/Error Diff: .....
+2c2
+< xy=8  
+---
+> xy=0
+8c8
+< 004: 7008 
+---
+> 004: 7000
+
+################### input-11##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 3 offset 5: SYM_EXPECTED
+---
+> Parse Error line 3 offset 5: SYM_EXPECTED
+
+################### input-12##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 3 offset 9: ADDR_EXPECTED
+---
+> Parse Error line 3 offset 8: ADDR_EXPECTED
+
+################### input-13##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 1 offset 2: SYM_EXPECTED
+---
+> Parse Error line 1 offset 2: SYM_EXPECTED
+
+################### input-14##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 1 offset 4: NUM_EXPECTED
+---
+> Parse Error line 1 offset 5: NUM_EXPECTED
+
+################### input-15##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 1 offset 0: TO_MANY_DEF_IN_MODULE
+---
+> Parse Error line 1 offset 1: TO_MANY_DEF_IN_MODULE
+
+################### input-16##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 1 offset 2: TO_MANY_USE_IN_MODULE
+---
+> Parse Error line 2 offset 1: TO_MANY_USE_IN_MODULE
+
+################### input-17##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 7 offset 5: ADDR_EXPECTED
+---
+> Parse Error line 7 offset 1: TO_MANY_INSTR
+
+################### input-18##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+1c1
+< Parse error line 3 offset 3: SYM_EXPECTED
+---
+> Parse Error line 3 offset 1: SYM_EXPECTED
+
+################### input-19##################
+###    Warning Diff:    .....
+###    Code/Error Diff: .....
+6c6
+< 003: 0 
+---
+> 003: 0000
+

@@ -31,6 +31,7 @@ for (int i =0;i<numOptions;i++){
 	bool validOption =false;
 	string compareString= string("-v");
 	string optionString  = string(argv[i+1]);
+
 	if (compareString==optionString || optionString == string("-sF") || optionString == string("-sL") ||optionString == string("-sS")||regex_match(argv[i+1],reg)){
 		validOption = true;
 	}
@@ -38,7 +39,6 @@ for (int i =0;i<numOptions;i++){
 		cout<<"INVALID OPTION!!"<<endl;
 		exit(1);
 	}
-
 	if (compareString==optionString)
 		verbose = true;
 	if (optionString==string("-sF"))
@@ -46,22 +46,19 @@ for (int i =0;i<numOptions;i++){
 	if (optionString==string("-sL"))
 		schedName = "LCFS";
 	if (optionString==string("-sS"))
-		schedName == "SJF";
+		schedName = "SJF";
 	if (regex_match(argv[i+1],reg)){
+		string quantumString = optionString.substr(3,optionString.length());
+		quantum = atoi(quantumString.c_str());
 		char schedType =optionString[2];
 		if (schedType=='R')
 			schedName = "RR";
 		if (schedType=='P')
 			schedName = "PRIO";
-		string quantumString = optionString.substr(3,optionString.length());
-		quantum = atoi(quantumString.c_str());
-
-		cout<<"sched type: "<<schedType<<", quantum: "<<quantum<<endl;
 	}
-
 }
 
-
+//cout<<"sched name: *"<<schedName<<"*"<<endl;
 
 string inputFileName = argv[numOptions+1];
 string randFileName = argv[numOptions+2];
@@ -75,17 +72,16 @@ if (schedName == "LCFS"){
 sched = new LCFS();
 }
 if (schedName=="SJF"){
-sched = new SJF(); //placeholder for now
+sched = new SJF(); 
 }
 if (schedName=="RR"){
-sched = new RR(quantum); //placeholder for now
+sched = new RR(quantum); 
 }
 if (schedName=="PRIO"){
 sched = new PRIO(quantum); //placeholder for now
 }
 
 DES des(argv[numOptions+1],&rand,sched);
-
 des.run_simulation(verbose);
 
 return 0;
