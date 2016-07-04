@@ -34,7 +34,17 @@ public class Module {
         readDefLine(st);
         readUseLine(st);
         readInstructLine(st);
-
+        if (Linker.passNumber == 1){
+            for (int i=0; i<this.numDefs;i++){
+                String symbolName = Linker.defKeys.get(i);
+                int symbolValue = Integer.parseInt(Linker.defValues.get(i))-this.base_address;
+                if (symbolValue>=this.numInstructs){
+                System.out.println("Warning: Module " + moduleNumber + ": " + symbolName+" to big " +symbolValue+ " (max="+(this.numInstructs-1)+") assume zero relative");
+                Linker.defValues.set(i,Integer.toString(this.base_address));
+                }   
+            }
+        }
+        
                 //end parsing instruction string
         
         }
@@ -45,11 +55,11 @@ public class Module {
         if (token==StreamTokenizer.TT_NUMBER){
             this.numDefs = (int) st.nval;
         } else{
-            System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
             System.exit(1);
             }
         if ((int) st.nval>16){
-            System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": TO_MANY_DEF_IN_MODULE");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": TO_MANY_DEF_IN_MODULE");
             System.exit(1);
         }
             for (int i=0; i<numDefs;i++){
@@ -63,8 +73,11 @@ public class Module {
             int symbolValue = -1;
             if (token==StreamTokenizer.TT_WORD){
                 symbolName = st.sval;
+                if (symbolName.length()>16){
+                    System.out.println("Parse Error line  "+Linker.realLineNumber + " offset " + Linker.oldOffsetCounter + ": SYM_TOLONG"  );
+                }
             } else{
-                System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter+ ": SYM_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter+ ": SYM_EXPECTED");
                 System.exit(1);
             }
             token  = nextTokenSpec(st);
@@ -72,7 +85,7 @@ public class Module {
             if (token==StreamTokenizer.TT_NUMBER){
                 symbolValue = (int) st.nval; 
             } else {
-                System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
                 System.exit(1);
             }
             if (Linker.defKeys.contains(symbolName)){
@@ -85,7 +98,7 @@ public class Module {
             Linker.defErrors.add("");
             }
             this.defKeys.add(symbolName);
-            
+
             }
             if (Linker.passNumber == 2){
              if (!Linker.useList.contains(symbolName)){              
@@ -100,11 +113,11 @@ public class Module {
         if (token==StreamTokenizer.TT_NUMBER){
             this.numUses = (int)st.nval;
         } else{
-            System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
             System.exit(1);
         }
         if ((int) st.nval>16){
-            System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": TO_MANY_USE_IN_MODULE");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": TO_MANY_USE_IN_MODULE");
             System.exit(1);
         }
             for (int i=0; i<numUses;i++){
@@ -119,7 +132,7 @@ public class Module {
                 if (token==StreamTokenizer.TT_WORD){
                 symbolName = st.sval;
             } else{
-                System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": SYM_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": SYM_EXPECTED");
                 System.exit(1);
             }
             useList.add(symbolName);
@@ -135,12 +148,14 @@ public class Module {
         int token = nextTokenSpec(st);
         if (token==StreamTokenizer.TT_NUMBER){
             this.numInstructs = (int) st.nval;
+            Linker.totalInstructions+=this.numInstructs;
         } else{
-            System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
             System.exit(1);
         }
-        if (this.numInstructs>=512){
-            System.out.println("Parse error line  "+Linker.realLineNumber + " offset " + Linker.oldOffsetCounter + ": TO_MANY_INSTR"  );
+        if (Linker.totalInstructions>=512){
+            System.out.println("Parse Error line  "+Linker.realLineNumber + " offset " + Linker.oldOffsetCounter + ": TO_MANY_INSTR"  );
+            System.exit(1);
         }
             for (int i=0; i<numInstructs;i++){
                 readInstruct(st);
@@ -148,7 +163,8 @@ public class Module {
             
               for (int i=0; i<numUses;i++){
                 if (!this.instructList.contains(i)&&Linker.passNumber==2){
-                    System.out.println("Warning: Module " + moduleNumber + ": " + useList.get(i)+" appeared in the uselist but was not actually used");
+                    Linker.instructList.add("Warning: Module " + moduleNumber + ": " + useList.get(i)+" appeared in the uselist but was not actually used");
+                    Linker.instructErrors.add("");
                 }
             }
         }
@@ -165,16 +181,17 @@ public class Module {
                     st.sval.contentEquals("R"))){
                 instructType = st.sval;
             } else{
-                System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter +": ADDR_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter +": ADDR_EXPECTED");
                 System.exit(1);
                   }
             token = nextTokenSpec(st);
             if (token==StreamTokenizer.TT_NUMBER ){
                 instructCode = (int) st.nval;
             } else{
-                System.out.println("Parse error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": ADDR_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": ADDR_EXPECTED");
                 System.exit(1);
                }
+
             if (instructCode>9999 && Linker.passNumber == 1){
                 if (!instructType.contentEquals("I")){
                     Linker.instructList.add(Integer.toString(9999));
@@ -207,7 +224,7 @@ public class Module {
             if (instructType.contentEquals("R")){
                 int operand  = Integer.parseInt(Integer.toString(instructCode).substring(1));
                 int baseOperand = instructCode-operand;
-
+                //System.out.println("instructCode "+ instructCode+", operand: "+ operand);
                 if (operand<=this.numInstructs){ 
                 Linker.instructList.add(Integer.toString(instructCode + this.base_address));
                 Linker.instructErrors.add("");
@@ -242,7 +259,7 @@ public class Module {
                 
                 else{
                 Linker.instructList.add(Integer.toString(instructCode));
-                Linker.instructErrors.add("Error: External address exceeds length of use list; treated as immediate");
+                Linker.instructErrors.add("Error: External address exceeds length of uselist; treated as immediate");
                 }
 
             }

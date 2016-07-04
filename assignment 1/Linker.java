@@ -35,6 +35,7 @@ public class Linker {
     ArrayList<Module> modules= new ArrayList<Module>();
     public static BufferedReader dataReader = null;
     public static int realLineNumber;
+    public static int totalInstructions=0;
     /**
      * @param args the command line arguments
      */
@@ -92,16 +93,24 @@ public class Linker {
          
          System.out.println("");
          System.out.println("Memory Map");
+         int  count = 0;
          for (int i =0; i<instructList.size();i++){
-             String formatted = String.format("%03d", i);
-             System.out.println(formatted + ": " + instructList.get(i) + " " + instructErrors.get(i));
+             String formatted = String.format("%03d", count);
+             //System.out.println("first character: "+instructList.get(i).substring(0,1));
+             if (instructList.get(i).substring(0,1).contentEquals("W")){
+                //System.out.println("encountered warning");
+                System.out.println(instructList.get(i));
+             } else{
+                count++;
+                System.out.println(formatted + ": " + instructList.get(i) + " " + instructErrors.get(i));
+             }
          }
      
-    
-         System.out.println("");
-         for (int i=0;i<warnings.size();i++){
-             System.out.println(warnings.get(i));
-         }
+             System.out.println("");
+             for (int i=0;i<warnings.size();i++){
+                 System.out.println(warnings.get(i));
+             }
+         
        
         } catch (IOException ioe) {
             System.out.println("message: " + ioe.getMessage());

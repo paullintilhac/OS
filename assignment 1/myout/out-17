@@ -1,1 +1,2 @@
-Parse error line 7 offset 5: ADDR_EXPECTED
+Parse Error line  6 offset 3: TO_MANY_INSTR
+Parse Error line 7 offset 5: ADDR_EXPECTED
