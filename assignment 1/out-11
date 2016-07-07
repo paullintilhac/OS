@@ -1,0 +1,2 @@
+def token: z
+Parse Error line 3 offset 1: SYM_EXPECTED

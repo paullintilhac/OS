@@ -1,5 +1,7 @@
+def token: X31
 Symbol Table
 X31=4  
+def token: X31
 
 Memory Map
 000: 1000 Error: X21 is not defined; zero used

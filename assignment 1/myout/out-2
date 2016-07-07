@@ -1,6 +1,260 @@
+token: *1*, start: 0, end: 1, line: 1, bol index: 0
+mstart: 0, bolIndex: 0
+token: **, start: 1, end: 1, line: 1, bol index: 0
+token: *xy*, start: 6, end: 8, line: 2, bol index: 6
+mstart: 6, bolIndex: 6
+token: *2*, start: 9, end: 10, line: 2, bol index: 6
+mstart: 9, bolIndex: 6
+token: **, start: 10, end: 10, line: 2, bol index: 6
+token: *2*, start: 11, end: 12, line: 3, bol index: 11
+mstart: 11, bolIndex: 11
+token: *z*, start: 13, end: 14, line: 3, bol index: 11
+mstart: 13, bolIndex: 11
+token: *xy*, start: 26, end: 28, line: 3, bol index: 11
+mstart: 26, bolIndex: 11
+token: **, start: 28, end: 28, line: 3, bol index: 11
+token: *5*, start: 29, end: 30, line: 4, bol index: 29
+mstart: 29, bolIndex: 29
+token: *R*, start: 32, end: 33, line: 4, bol index: 29
+mstart: 32, bolIndex: 29
+token: *1004*, start: 34, end: 38, line: 4, bol index: 29
+mstart: 34, bolIndex: 29
+token: *I*, start: 40, end: 41, line: 4, bol index: 29
+mstart: 40, bolIndex: 29
+token: *5678*, start: 42, end: 46, line: 4, bol index: 29
+mstart: 42, bolIndex: 29
+token: **, start: 48, end: 48, line: 4, bol index: 29
+token: *E*, start: 55, end: 56, line: 5, bol index: 55
+mstart: 55, bolIndex: 55
+token: *2000*, start: 57, end: 61, line: 5, bol index: 55
+mstart: 57, bolIndex: 55
+token: *R*, start: 63, end: 64, line: 5, bol index: 55
+mstart: 63, bolIndex: 55
+token: **, start: 65, end: 65, line: 5, bol index: 55
+token: *8002*, start: 66, end: 70, line: 6, bol index: 66
+mstart: 66, bolIndex: 66
+token: *E*, start: 72, end: 73, line: 6, bol index: 66
+mstart: 72, bolIndex: 66
+token: *7001*, start: 74, end: 78, line: 6, bol index: 66
+mstart: 74, bolIndex: 66
+token: *0*, start: 80, end: 81, line: 6, bol index: 66
+mstart: 80, bolIndex: 66
+token: *1*, start: 87, end: 88, line: 6, bol index: 66
+mstart: 87, bolIndex: 66
+token: *z*, start: 89, end: 90, line: 6, bol index: 66
+mstart: 89, bolIndex: 66
+token: **, start: 90, end: 90, line: 6, bol index: 66
+token: *6*, start: 91, end: 92, line: 7, bol index: 91
+mstart: 91, bolIndex: 91
+token: *R*, start: 93, end: 94, line: 7, bol index: 91
+mstart: 93, bolIndex: 91
+token: *8001*, start: 95, end: 99, line: 7, bol index: 91
+mstart: 95, bolIndex: 91
+token: *E*, start: 101, end: 102, line: 7, bol index: 91
+mstart: 101, bolIndex: 91
+token: *1000*, start: 103, end: 107, line: 7, bol index: 91
+mstart: 103, bolIndex: 91
+token: *E*, start: 109, end: 110, line: 7, bol index: 91
+mstart: 109, bolIndex: 91
+token: **, start: 111, end: 111, line: 7, bol index: 91
+token: *1000*, start: 112, end: 116, line: 8, bol index: 112
+mstart: 112, bolIndex: 112
+token: *E*, start: 118, end: 119, line: 8, bol index: 112
+mstart: 118, bolIndex: 112
+token: *3000*, start: 120, end: 124, line: 8, bol index: 112
+mstart: 120, bolIndex: 112
+token: *R*, start: 126, end: 127, line: 8, bol index: 112
+mstart: 126, bolIndex: 112
+token: *1002*, start: 128, end: 132, line: 8, bol index: 112
+mstart: 128, bolIndex: 112
+token: *A*, start: 134, end: 135, line: 8, bol index: 112
+mstart: 134, bolIndex: 112
+token: *1010*, start: 136, end: 140, line: 8, bol index: 112
+mstart: 136, bolIndex: 112
+token: **, start: 140, end: 140, line: 8, bol index: 112
+token: *0*, start: 141, end: 142, line: 9, bol index: 141
+mstart: 141, bolIndex: 141
+token: **, start: 142, end: 142, line: 9, bol index: 141
+token: *1*, start: 143, end: 144, line: 10, bol index: 143
+mstart: 143, bolIndex: 143
+token: **, start: 144, end: 144, line: 10, bol index: 143
+token: *z*, start: 145, end: 146, line: 11, bol index: 145
+mstart: 145, bolIndex: 145
+token: **, start: 146, end: 146, line: 11, bol index: 145
+token: *2*, start: 147, end: 148, line: 12, bol index: 147
+mstart: 147, bolIndex: 147
+token: **, start: 148, end: 148, line: 12, bol index: 147
+token: *R*, start: 149, end: 150, line: 13, bol index: 149
+mstart: 149, bolIndex: 149
+token: **, start: 150, end: 150, line: 13, bol index: 149
+token: *5001*, start: 151, end: 155, line: 14, bol index: 151
+mstart: 151, bolIndex: 151
+token: **, start: 155, end: 155, line: 14, bol index: 151
+token: *E*, start: 156, end: 157, line: 15, bol index: 156
+mstart: 156, bolIndex: 156
+token: *4000*, start: 158, end: 162, line: 15, bol index: 156
+mstart: 158, bolIndex: 156
+token: **, start: 162, end: 162, line: 15, bol index: 156
+token: *1*, start: 163, end: 164, line: 16, bol index: 163
+mstart: 163, bolIndex: 163
+token: *z*, start: 165, end: 166, line: 16, bol index: 163
+mstart: 165, bolIndex: 163
+token: *2*, start: 167, end: 168, line: 16, bol index: 163
+mstart: 167, bolIndex: 163
+token: **, start: 168, end: 168, line: 16, bol index: 163
+token: *2*, start: 169, end: 170, line: 17, bol index: 169
+mstart: 169, bolIndex: 169
+token: **, start: 170, end: 170, line: 17, bol index: 169
+token: *xy*, start: 171, end: 173, line: 18, bol index: 171
+mstart: 171, bolIndex: 171
+token: *z*, start: 174, end: 175, line: 18, bol index: 171
+mstart: 174, bolIndex: 171
+token: **, start: 175, end: 175, line: 18, bol index: 171
+token: *3*, start: 176, end: 177, line: 19, bol index: 176
+mstart: 176, bolIndex: 176
+token: *A*, start: 178, end: 179, line: 19, bol index: 176
+mstart: 178, bolIndex: 176
+token: *8000*, start: 180, end: 184, line: 19, bol index: 176
+mstart: 180, bolIndex: 176
+token: **, start: 184, end: 184, line: 19, bol index: 176
+token: *E*, start: 185, end: 186, line: 20, bol index: 185
+mstart: 185, bolIndex: 185
+token: *1001*, start: 187, end: 191, line: 20, bol index: 185
+mstart: 187, bolIndex: 185
+token: *E*, start: 193, end: 194, line: 20, bol index: 185
+mstart: 193, bolIndex: 185
+token: *2000*, start: 195, end: 199, line: 20, bol index: 185
+mstart: 195, bolIndex: 185
 Symbol Table
 xy=2  
 z=15  
+token: *1*, start: 0, end: 1, line: 20, bol index: 185
+mstart: 0, bolIndex: 185
+token: **, start: 1, end: 1, line: 20, bol index: 185
+token: *xy*, start: 6, end: 8, line: 21, bol index: 6
+mstart: 6, bolIndex: 6
+token: *2*, start: 9, end: 10, line: 21, bol index: 6
+mstart: 9, bolIndex: 6
+token: **, start: 10, end: 10, line: 21, bol index: 6
+token: *2*, start: 11, end: 12, line: 22, bol index: 11
+mstart: 11, bolIndex: 11
+token: *z*, start: 13, end: 14, line: 22, bol index: 11
+mstart: 13, bolIndex: 11
+token: *xy*, start: 26, end: 28, line: 22, bol index: 11
+mstart: 26, bolIndex: 11
+token: **, start: 28, end: 28, line: 22, bol index: 11
+token: *5*, start: 29, end: 30, line: 23, bol index: 29
+mstart: 29, bolIndex: 29
+token: *R*, start: 32, end: 33, line: 23, bol index: 29
+mstart: 32, bolIndex: 29
+token: *1004*, start: 34, end: 38, line: 23, bol index: 29
+mstart: 34, bolIndex: 29
+token: *I*, start: 40, end: 41, line: 23, bol index: 29
+mstart: 40, bolIndex: 29
+token: *5678*, start: 42, end: 46, line: 23, bol index: 29
+mstart: 42, bolIndex: 29
+token: **, start: 48, end: 48, line: 23, bol index: 29
+token: *E*, start: 55, end: 56, line: 24, bol index: 55
+mstart: 55, bolIndex: 55
+token: *2000*, start: 57, end: 61, line: 24, bol index: 55
+mstart: 57, bolIndex: 55
+token: *R*, start: 63, end: 64, line: 24, bol index: 55
+mstart: 63, bolIndex: 55
+token: **, start: 65, end: 65, line: 24, bol index: 55
+token: *8002*, start: 66, end: 70, line: 25, bol index: 66
+mstart: 66, bolIndex: 66
+token: *E*, start: 72, end: 73, line: 25, bol index: 66
+mstart: 72, bolIndex: 66
+token: *7001*, start: 74, end: 78, line: 25, bol index: 66
+mstart: 74, bolIndex: 66
+token: *0*, start: 80, end: 81, line: 25, bol index: 66
+mstart: 80, bolIndex: 66
+token: *1*, start: 87, end: 88, line: 25, bol index: 66
+mstart: 87, bolIndex: 66
+token: *z*, start: 89, end: 90, line: 25, bol index: 66
+mstart: 89, bolIndex: 66
+token: **, start: 90, end: 90, line: 25, bol index: 66
+token: *6*, start: 91, end: 92, line: 26, bol index: 91
+mstart: 91, bolIndex: 91
+token: *R*, start: 93, end: 94, line: 26, bol index: 91
+mstart: 93, bolIndex: 91
+token: *8001*, start: 95, end: 99, line: 26, bol index: 91
+mstart: 95, bolIndex: 91
+token: *E*, start: 101, end: 102, line: 26, bol index: 91
+mstart: 101, bolIndex: 91
+token: *1000*, start: 103, end: 107, line: 26, bol index: 91
+mstart: 103, bolIndex: 91
+token: *E*, start: 109, end: 110, line: 26, bol index: 91
+mstart: 109, bolIndex: 91
+token: **, start: 111, end: 111, line: 26, bol index: 91
+token: *1000*, start: 112, end: 116, line: 27, bol index: 112
+mstart: 112, bolIndex: 112
+token: *E*, start: 118, end: 119, line: 27, bol index: 112
+mstart: 118, bolIndex: 112
+token: *3000*, start: 120, end: 124, line: 27, bol index: 112
+mstart: 120, bolIndex: 112
+token: *R*, start: 126, end: 127, line: 27, bol index: 112
+mstart: 126, bolIndex: 112
+token: *1002*, start: 128, end: 132, line: 27, bol index: 112
+mstart: 128, bolIndex: 112
+token: *A*, start: 134, end: 135, line: 27, bol index: 112
+mstart: 134, bolIndex: 112
+token: *1010*, start: 136, end: 140, line: 27, bol index: 112
+mstart: 136, bolIndex: 112
+token: **, start: 140, end: 140, line: 27, bol index: 112
+token: *0*, start: 141, end: 142, line: 28, bol index: 141
+mstart: 141, bolIndex: 141
+token: **, start: 142, end: 142, line: 28, bol index: 141
+token: *1*, start: 143, end: 144, line: 29, bol index: 143
+mstart: 143, bolIndex: 143
+token: **, start: 144, end: 144, line: 29, bol index: 143
+token: *z*, start: 145, end: 146, line: 30, bol index: 145
+mstart: 145, bolIndex: 145
+token: **, start: 146, end: 146, line: 30, bol index: 145
+token: *2*, start: 147, end: 148, line: 31, bol index: 147
+mstart: 147, bolIndex: 147
+token: **, start: 148, end: 148, line: 31, bol index: 147
+token: *R*, start: 149, end: 150, line: 32, bol index: 149
+mstart: 149, bolIndex: 149
+token: **, start: 150, end: 150, line: 32, bol index: 149
+token: *5001*, start: 151, end: 155, line: 33, bol index: 151
+mstart: 151, bolIndex: 151
+token: **, start: 155, end: 155, line: 33, bol index: 151
+token: *E*, start: 156, end: 157, line: 34, bol index: 156
+mstart: 156, bolIndex: 156
+token: *4000*, start: 158, end: 162, line: 34, bol index: 156
+mstart: 158, bolIndex: 156
+token: **, start: 162, end: 162, line: 34, bol index: 156
+token: *1*, start: 163, end: 164, line: 35, bol index: 163
+mstart: 163, bolIndex: 163
+token: *z*, start: 165, end: 166, line: 35, bol index: 163
+mstart: 165, bolIndex: 163
+token: *2*, start: 167, end: 168, line: 35, bol index: 163
+mstart: 167, bolIndex: 163
+token: **, start: 168, end: 168, line: 35, bol index: 163
+token: *2*, start: 169, end: 170, line: 36, bol index: 169
+mstart: 169, bolIndex: 169
+token: **, start: 170, end: 170, line: 36, bol index: 169
+token: *xy*, start: 171, end: 173, line: 37, bol index: 171
+mstart: 171, bolIndex: 171
+token: *z*, start: 174, end: 175, line: 37, bol index: 171
+mstart: 174, bolIndex: 171
+token: **, start: 175, end: 175, line: 37, bol index: 171
+token: *3*, start: 176, end: 177, line: 38, bol index: 176
+mstart: 176, bolIndex: 176
+token: *A*, start: 178, end: 179, line: 38, bol index: 176
+mstart: 178, bolIndex: 176
+token: *8000*, start: 180, end: 184, line: 38, bol index: 176
+mstart: 180, bolIndex: 176
+token: **, start: 184, end: 184, line: 38, bol index: 176
+token: *E*, start: 185, end: 186, line: 39, bol index: 185
+mstart: 185, bolIndex: 185
+token: *1001*, start: 187, end: 191, line: 39, bol index: 185
+mstart: 187, bolIndex: 185
+token: *E*, start: 193, end: 194, line: 39, bol index: 185
+mstart: 193, bolIndex: 185
+token: *2000*, start: 195, end: 199, line: 39, bol index: 185
+mstart: 195, bolIndex: 185
 
 Memory Map
 000: 1004 

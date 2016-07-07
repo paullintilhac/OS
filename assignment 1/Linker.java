@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
  */
 
 public class Linker {
-    public static StreamTokenizer st = null;
+    public static Matcher matcher=null;
     public static ArrayList<String> defKeys = new ArrayList<>();
     public static ArrayList<String> defValues = new ArrayList<>();
     public static ArrayList<String> useList = new ArrayList<>();
@@ -35,20 +35,27 @@ public class Linker {
     public static int passNumber =1;
     public static int offsetCounter;
     public static int oldOffsetCounter;
-    ArrayList<Module> modules= new ArrayList<Module>();
+    public static int bolIndex;
+    ArrayList<Module> modules;
     public static BufferedReader dataReader = null;
-    public static int realLineNumber;
+    public static int realLineNumber=1;
+    public static int oldLineNumber=1;
     public static int totalInstructions=0;
+    public static int eofIndex;
+
     /**
-     * @param args the command line arguments
-     */
+    * @param args the command line arguments
+    */
+
     public static void main(String[] args) {
         int ch = -1;
-        offsetCounter = 0;
+        offsetCounter = 1;
+        oldOffsetCounter=1;
         String wholeFile="";
         try {
+
             int moduleNumber = 1;
-            String filename =args[0];
+            String filename = args[0];
             //System.out.println("filename: " + filename);
             dataReader = new BufferedReader(new FileReader(filename));
 
@@ -56,32 +63,22 @@ public class Linker {
                 wholeFile += (char) dataReader.read();
             }
 
-            Matcher matcher = Pattern.compile("\\S+").matcher(wholeFile);
-            while(matcher.find()){
-                System.out.println("token: "+ matcher.group()+", is number?> "+Module.isNumber(matcher.group()));
-            }
-
-            st = new StreamTokenizer(dataReader);
-            
+            eofIndex = wholeFile.length();
+            matcher = Pattern.compile("\\S+|(?m)$").matcher(wholeFile);
             ArrayList<Module> modules= new ArrayList<Module>();
-           
-            int baseAddress= 0;
-            st.eolIsSignificant(true);
-
+            
+            int baseAddress=0;
             //begin first pass
-
          do {
-            Module m = new Module(st,baseAddress,moduleNumber);
+            Module m = new Module(matcher,baseAddress,moduleNumber);
             //System.out.println("module created");
             moduleNumber++;
             modules.add(m);
             baseAddress+=m.numInstructs;
-
-            Module.nextTokenSpec(st);
-            st.pushBack();
-            
-
-         } while (st.ttype!=StreamTokenizer.TT_EOF);
+            if (matcher.end()+1 == eofIndex){
+                break;
+            }
+         } while (true);
          
          // print symbol table
          
@@ -93,14 +90,14 @@ public class Linker {
          passNumber = 2;
 
          // begin second pass
-         dataReader = new BufferedReader(new FileReader(filename));
-         st = new StreamTokenizer(dataReader);
+         matcher = Pattern.compile("\\S+|(?m)$").matcher(wholeFile);
          //System.out.println("pass two");
+
          for (int i=0;i<modules.size();i++){
              Module m = modules.get(i);
-             m.readDefLine(st);
-             m.readUseLine(st);
-             m.readInstructLine(st);
+             m.readDefLine(matcher);
+             m.readUseLine(matcher);
+             m.readInstructLine(matcher);
          }
 
          //print out memory map
@@ -129,6 +126,8 @@ public class Linker {
         } catch (IOException ioe) {
             System.out.println("message: " + ioe.getMessage());
         }
+        
+
     }
    
     

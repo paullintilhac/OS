@@ -1,0 +1,2 @@
+def token: z
+Parse Error line 1 offset 0: NUM_EXPECTED

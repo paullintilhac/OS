@@ -1,6 +1,78 @@
+token: *1*, start: 0, end: 1, line: 1, bol index: 0
+mstart: 0, bolIndex: 0
+token: *xy*, start: 2, end: 4, line: 1, bol index: 0
+mstart: 2, bolIndex: 0
+token: *8*, start: 5, end: 6, line: 1, bol index: 0
+mstart: 5, bolIndex: 0
+token: **, start: 6, end: 6, line: 1, bol index: 0
+token: *2*, start: 7, end: 8, line: 2, bol index: 7
+mstart: 7, bolIndex: 7
+token: *z*, start: 9, end: 10, line: 2, bol index: 7
+mstart: 9, bolIndex: 7
+token: *xy*, start: 11, end: 13, line: 2, bol index: 7
+mstart: 11, bolIndex: 7
+token: **, start: 13, end: 13, line: 2, bol index: 7
+token: *5*, start: 14, end: 15, line: 3, bol index: 14
+mstart: 14, bolIndex: 14
+token: *R*, start: 16, end: 17, line: 3, bol index: 14
+mstart: 16, bolIndex: 14
+token: *1004*, start: 18, end: 22, line: 3, bol index: 14
+mstart: 18, bolIndex: 14
+token: *I*, start: 24, end: 25, line: 3, bol index: 14
+mstart: 24, bolIndex: 14
+token: *5678*, start: 26, end: 30, line: 3, bol index: 14
+mstart: 26, bolIndex: 14
+token: *E*, start: 32, end: 33, line: 3, bol index: 14
+mstart: 32, bolIndex: 14
+token: *2000*, start: 34, end: 38, line: 3, bol index: 14
+mstart: 34, bolIndex: 14
+token: *R*, start: 40, end: 41, line: 3, bol index: 14
+mstart: 40, bolIndex: 14
+token: *8002*, start: 42, end: 46, line: 3, bol index: 14
+mstart: 42, bolIndex: 14
+token: *E*, start: 48, end: 49, line: 3, bol index: 14
+mstart: 48, bolIndex: 14
+token: *7001*, start: 50, end: 54, line: 3, bol index: 14
+mstart: 50, bolIndex: 14
 Warning: Module 1: xy to big 8 (max=4) assume zero relative
 Symbol Table
 xy=0  
+token: *1*, start: 0, end: 1, line: 3, bol index: 14
+mstart: 0, bolIndex: 14
+token: *xy*, start: 2, end: 4, line: 3, bol index: 14
+mstart: 2, bolIndex: 14
+token: *8*, start: 5, end: 6, line: 3, bol index: 14
+mstart: 5, bolIndex: 14
+token: **, start: 6, end: 6, line: 3, bol index: 14
+token: *2*, start: 7, end: 8, line: 4, bol index: 7
+mstart: 7, bolIndex: 7
+token: *z*, start: 9, end: 10, line: 4, bol index: 7
+mstart: 9, bolIndex: 7
+token: *xy*, start: 11, end: 13, line: 4, bol index: 7
+mstart: 11, bolIndex: 7
+token: **, start: 13, end: 13, line: 4, bol index: 7
+token: *5*, start: 14, end: 15, line: 5, bol index: 14
+mstart: 14, bolIndex: 14
+token: *R*, start: 16, end: 17, line: 5, bol index: 14
+mstart: 16, bolIndex: 14
+token: *1004*, start: 18, end: 22, line: 5, bol index: 14
+mstart: 18, bolIndex: 14
+token: *I*, start: 24, end: 25, line: 5, bol index: 14
+mstart: 24, bolIndex: 14
+token: *5678*, start: 26, end: 30, line: 5, bol index: 14
+mstart: 26, bolIndex: 14
+token: *E*, start: 32, end: 33, line: 5, bol index: 14
+mstart: 32, bolIndex: 14
+token: *2000*, start: 34, end: 38, line: 5, bol index: 14
+mstart: 34, bolIndex: 14
+token: *R*, start: 40, end: 41, line: 5, bol index: 14
+mstart: 40, bolIndex: 14
+token: *8002*, start: 42, end: 46, line: 5, bol index: 14
+mstart: 42, bolIndex: 14
+token: *E*, start: 48, end: 49, line: 5, bol index: 14
+mstart: 48, bolIndex: 14
+token: *7001*, start: 50, end: 54, line: 5, bol index: 14
+mstart: 50, bolIndex: 14
 
 Memory Map
 000: 1004 
