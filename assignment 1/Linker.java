@@ -14,11 +14,14 @@ package linker;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  *
  * @author paul
  */
+
 public class Linker {
     public static StreamTokenizer st = null;
     public static ArrayList<String> defKeys = new ArrayList<>();
@@ -42,11 +45,22 @@ public class Linker {
     public static void main(String[] args) {
         int ch = -1;
         offsetCounter = 0;
+        String wholeFile="";
         try {
             int moduleNumber = 1;
             String filename =args[0];
             //System.out.println("filename: " + filename);
             dataReader = new BufferedReader(new FileReader(filename));
+
+            while (dataReader.ready()) {
+                wholeFile += (char) dataReader.read();
+            }
+
+            Matcher matcher = Pattern.compile("\\S+").matcher(wholeFile);
+            while(matcher.find()){
+                System.out.println("token: "+ matcher.group()+", is number?> "+Module.isNumber(matcher.group()));
+            }
+
             st = new StreamTokenizer(dataReader);
             
             ArrayList<Module> modules= new ArrayList<Module>();

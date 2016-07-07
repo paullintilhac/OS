@@ -28,12 +28,12 @@ public class Module {
     public ArrayList<String> defKeys = new ArrayList<>();
     public ArrayList<Integer> instructList = new ArrayList<>();
     private final int base_address;
-        public Module(StreamTokenizer st, int baseAddress,int moduleNumber) throws IOException{
+        public Module(Matcher m, int baseAddress,int moduleNumber) throws IOException{
         this.base_address = baseAddress;
         this.moduleNumber = moduleNumber;
-        readDefLine(st);
-        readUseLine(st);
-        readInstructLine(st);
+        readDefLine(m);
+        readUseLine(m);
+        readInstructLine(m);
         if (Linker.passNumber == 1){
             for (int i=0; i<this.numDefs;i++){
                 String symbolName = Linker.defKeys.get(i);
@@ -48,31 +48,31 @@ public class Module {
                 //end parsing instruction string
         
         }
-        public void readDefLine(StreamTokenizer st) throws IOException {
+        public void readDefLine(Matcher m) throws IOException {
         
-        int token = nextTokenSpec(st);
+        int token = nextTokenSpec(m);
 
-        if (token==StreamTokenizer.TT_NUMBER){
-            this.numDefs = (int) st.nval;
+        if (isNumber(token)){
+            this.numDefs = Integer.parseInt(token);
         } else{
             System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
             System.exit(1);
             }
-        if ((int) st.nval>16){
+        if ((int) Integer.parseInt(token)>16){
             System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": TO_MANY_DEF_IN_MODULE");
             System.exit(1);
         }
             for (int i=0; i<numDefs;i++){
-                readDef(st);
+                readDef(m);
             }
         }
         
-        private void readDef(StreamTokenizer st) throws IOException{
-            int token = nextTokenSpec(st);
+        private void readDef(Matcher m) throws IOException{
+            int token = nextTokenSpec(m);
             String symbolName = "";
             int symbolValue = -1;
-            if (token==StreamTokenizer.TT_WORD){
-                symbolName = st.sval;
+            if (!isNumber(token)){
+                symbolName = token;
                 if (symbolName.length()>16){
                     System.out.println("Parse Error line  "+Linker.realLineNumber + " offset " + Linker.oldOffsetCounter + ": SYM_TOLONG"  );
                 }
@@ -80,10 +80,10 @@ public class Module {
                 System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter+ ": SYM_EXPECTED");
                 System.exit(1);
             }
-            token  = nextTokenSpec(st);
+            token  = nextTokenSpec(m);
             if (Linker.passNumber ==1){
-            if (token==StreamTokenizer.TT_NUMBER){
-                symbolValue = (int) st.nval; 
+            if (isNumber(token)){
+                symbolValue = Integer.parseInt(token); 
             } else {
                 System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
                 System.exit(1);
@@ -107,25 +107,25 @@ public class Module {
             }
             }
         
- public void readUseLine(StreamTokenizer st) throws IOException {
+ public void readUseLine(Matcher m) throws IOException {
          
-        int token = nextTokenSpec(st);
-        if (token==StreamTokenizer.TT_NUMBER){
-            this.numUses = (int)st.nval;
+        int token = nextTokenSpec(m);
+        if (isNumber(token)){
+            this.numUses = Integer.parseInt(token);
         } else{
             System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": NUM_EXPECTED");
             System.exit(1);
         }
-        if ((int) st.nval>16){
+        if (this.numUses>16){
             System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.oldOffsetCounter + ": TO_MANY_USE_IN_MODULE");
             System.exit(1);
         }
             for (int i=0; i<numUses;i++){
-                readUse(st);
+                readUse(m);
             }
         }
         
-        private void readUse(StreamTokenizer st) throws IOException{
+        private void readUse(Matcher m) throws IOException{
             int token = nextTokenSpec(st);
             String symbolName = "";
             if (Linker.passNumber == 1){
