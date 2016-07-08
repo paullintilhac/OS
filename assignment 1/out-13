@@ -1,7 +1,1 @@
-Exception in thread "main" java.lang.NullPointerException
-	at linker.Module.isEOL(Module.java:307)
-	at linker.Module.nextTokenSpec(Module.java:283)
-	at linker.Module.readDef(Module.java:72)
-	at linker.Module.readDefLine(Module.java:67)
-	at linker.Module.<init>(Module.java:35)
-	at linker.Linker.main(Linker.java:68)
+Parse Error line 2 offset 1: SYM_EXPECTED

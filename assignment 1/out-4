@@ -1,9 +1,5 @@
-def token: X21
-def token: X21
 Symbol Table
 X21=3  Error: This variable is multiple times defined; first value used
-def token: X21
-def token: X21
 
 Memory Map
 000: 1003 

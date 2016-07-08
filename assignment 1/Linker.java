@@ -35,6 +35,7 @@ public class Linker {
     public static int passNumber =1;
     public static int offsetCounter;
     public static int oldOffsetCounter;
+    public static int endOffset;
     public static int bolIndex;
     ArrayList<Module> modules;
     public static BufferedReader dataReader = null;
@@ -51,6 +52,7 @@ public class Linker {
         int ch = -1;
         offsetCounter = 1;
         oldOffsetCounter=1;
+        endOffset = 1;
         String wholeFile="";
         try {
 

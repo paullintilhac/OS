@@ -1,11 +1,3 @@
-def token: X11
-def token: X12
-def token: X13
-def token: X21
-def token: X22
-def token: X23
-def token: X31
-def token: X61
 Symbol Table
 X11=6  
 X12=8  
@@ -15,14 +7,6 @@ X22=12
 X23=15  
 X31=20  
 X61=32  
-def token: X11
-def token: X12
-def token: X13
-def token: X21
-def token: X22
-def token: X23
-def token: X31
-def token: X61
 
 Memory Map
 000: 1000 

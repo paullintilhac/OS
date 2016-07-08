@@ -1,8 +1,1 @@
-token: *11*, start: 0, end: 2, line: 1, bol index: 0
-mstart: 0, bolIndex: 0
-token: **, start: 2, end: 2, line: 1, bol index: 0
-token: **, start: 3, end: 3, line: 2, bol index: 3
-token: **, start: 4, end: 4, line: 3, bol index: 4
-token: **, start: 5, end: 5, line: 4, bol index: 5
-mstart: 5, bolIndex: 5
-Parse Error line 1 offset 1: SYM_EXPECTED
+Parse Error line 1 offset 3: SYM_EXPECTED

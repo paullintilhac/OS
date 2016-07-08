@@ -61,7 +61,7 @@ public class Module {
         if (isNumber(token)){
             this.numDefs = Integer.parseInt(token);
         } else{
-            System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
             System.exit(1);
             }
         if ((int) Integer.parseInt(token)>16){
@@ -84,7 +84,7 @@ public class Module {
                     System.out.println("Parse Error line  "+Linker.realLineNumber + " offset " + Linker.offsetCounter + ": SYM_TOLONG"  );
                 }
             } else {
-                System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter+ ": SYM_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter+ ": SYM_EXPECTED");
                 System.exit(1);
             }
             token  = nextTokenSpec(m);
@@ -93,7 +93,7 @@ public class Module {
             if (isNumber(token)){
                 symbolValue = Integer.parseInt(token); 
             } else {
-                System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
                 System.exit(1);
             }
             if (Linker.defKeys.contains(symbolName)){
@@ -121,7 +121,7 @@ public class Module {
         if (isNumber(token)){
             this.numUses = Integer.parseInt(token);
         } else{
-            System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
             System.exit(1);
         }
         if (this.numUses>16){
@@ -158,7 +158,7 @@ public class Module {
             this.numInstructs = Integer.parseInt(token);
             Linker.totalInstructions+=this.numInstructs;
         } else{
-            System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
+            System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter + ": NUM_EXPECTED");
             System.exit(1);
         }
         if (Linker.totalInstructions>=512){
@@ -189,14 +189,14 @@ public class Module {
                     token.contentEquals("R"))){
                 instructType = token;
             } else{
-                System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter +": ADDR_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter +": ADDR_EXPECTED");
                 System.exit(1);
                   }
             token = nextTokenSpec(m);
             if (isNumber(token) ){
                 instructCode = Integer.parseInt(token);
             } else{
-                System.out.println("Parse Error line " + Linker.oldLineNumber +" offset " + Linker.offsetCounter + ": ADDR_EXPECTED");
+                System.out.println("Parse Error line " + Linker.realLineNumber +" offset " + Linker.offsetCounter + ": ADDR_EXPECTED");
                 System.exit(1);
             }
 
@@ -278,10 +278,10 @@ public class Module {
             boolean flag = false;
             m.find();
             String token = m.group();
-            System.out.println("token: *"+token+ "*, start: "+m.start()+ ", end: " + m.end() + ", line: " + Linker.realLineNumber + ", bol index: "+Linker.bolIndex);
+           //System.out.println("token: *"+token+ "*, start: "+m.start()+ ", end: " + m.end() + ", line: " + Linker.realLineNumber + ", bol index: "+Linker.bolIndex);
 
             //System.out.println("token in nextTokenSpec: " + token);
-            Linker.oldOffsetCounter = Linker.offsetCounter;
+            Linker.oldOffsetCounter = Linker.endOffset;
             Linker.oldLineNumber = Linker.realLineNumber;
             if (isEOL(token)){
                 Linker.realLineNumber++;
@@ -291,6 +291,8 @@ public class Module {
             while (isEOL(token)){
 
                 if (m.end() == Linker.eofIndex){
+                    Linker.realLineNumber = Linker.oldLineNumber;
+                    Linker.offsetCounter = Linker.endOffset;
                     break;
                 }
 
@@ -306,11 +308,13 @@ public class Module {
 
                 token = m.group();
 
-                System.out.println("token: *"+token+ "*, start: "+m.start()+ ", end: " + m.end()+ ", line: " + Linker.realLineNumber+ ", bol index: "+Linker.bolIndex);
+               //System.out.println("token: *"+token+ "*, start: "+m.start()+ ", end: " + m.end()+ ", line: " + Linker.realLineNumber+ ", bol index: "+Linker.bolIndex);
             }
-            System.out.println("mstart: " + m.start() + ", bolIndex: " + Linker.bolIndex);
+            //System.out.println("mstart: " + m.start() + ", bolIndex: " + Linker.bolIndex);
+            if (m.end() != Linker.eofIndex){
             Linker.offsetCounter  = m.start()-Linker.bolIndex+1;
-             
+            Linker.endOffset = m.end()-Linker.bolIndex+1;
+            }
                 //System.out.println("new offset: " + Linker.offsetCounter);
                 
             

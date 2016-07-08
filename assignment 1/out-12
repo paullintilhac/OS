@@ -1,8 +1,1 @@
-def token: z
-Exception in thread "main" java.lang.NullPointerException
-	at linker.Module.isEOL(Module.java:307)
-	at linker.Module.nextTokenSpec(Module.java:283)
-	at linker.Module.readInstruct(Module.java:178)
-	at linker.Module.readInstructLine(Module.java:164)
-	at linker.Module.<init>(Module.java:37)
-	at linker.Linker.main(Linker.java:68)
+Parse Error line 4 offset 1: ADDR_EXPECTED
