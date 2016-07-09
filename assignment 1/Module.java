@@ -152,7 +152,6 @@ public class Module {
             }
         
  public void readInstructLine(Matcher m) throws IOException {
-         
         String token = nextTokenSpec(m);
         if (isNumber(token)){
             this.numInstructs = Integer.parseInt(token);
@@ -162,6 +161,7 @@ public class Module {
             System.exit(1);
         }
         if (Linker.totalInstructions>=512){
+
             System.out.println("Parse Error line "+Linker.realLineNumber + " offset " + Linker.offsetCounter + ": TO_MANY_INSTR"  );
             System.exit(1);
         }
@@ -214,18 +214,18 @@ public class Module {
           
                
             if (instructType.contentEquals("I")){
-                Linker.instructList.add(Integer.toString(instructCode));
+                Linker.instructList.add(String.format("%04d", instructCode));
                 Linker.instructErrors.add("");
             }
             if (instructType.contentEquals("A")){
                 int operand  = Integer.parseInt(Integer.toString(instructCode).substring(1));
                 int baseOperand = instructCode-operand;
                 if (operand<=512){
-                Linker.instructList.add(Integer.toString(instructCode));
+                Linker.instructList.add(String.format("%04d", instructCode));
                 Linker.instructErrors.add("");
                 }
                 else{
-                Linker.instructList.add(Integer.toString(baseOperand));
+                Linker.instructList.add(String.format("%04d", baseOperand));
                 Linker.instructErrors.add("Error: Absolute address exceeds machine size; zero used");
                 }
             }
@@ -234,11 +234,11 @@ public class Module {
                 int baseOperand = instructCode-operand;
                 //System.out.println("instructCode "+ instructCode+", operand: "+ operand);
                 if (operand<=this.numInstructs){ 
-                Linker.instructList.add(Integer.toString(instructCode + this.base_address));
+                Linker.instructList.add(String.format("%04d", instructCode + this.base_address));
                 Linker.instructErrors.add("");
                 }
                 else{
-                Linker.instructList.add(Integer.toString(baseOperand));
+                Linker.instructList.add(String.format("%04d",baseOperand+this.base_address));
                 Linker.instructErrors.add("Error: Relative address exceeds module size; zero used");
                 }
             }
@@ -256,51 +256,54 @@ public class Module {
                 this.instructList.add(operand);
 
                 if (ind!=-1){
-                Linker.instructList.add(Integer.toString(Integer.parseInt(Linker.defValues.get(ind))+(baseOperand)));
+                Linker.instructList.add(String.format("%04d", Integer.parseInt(Linker.defValues.get(ind))+(baseOperand)));
                 Linker.instructErrors.add("");
                 }
                 else{
-                Linker.instructList.add(Integer.toString(baseOperand));
+                Linker.instructList.add(String.format("%04d", baseOperand));
                 Linker.instructErrors.add("Error: " + sym + " is not defined; zero used");
                 }
                 }
                 
                 else{
-                Linker.instructList.add(Integer.toString(instructCode));
+                Linker.instructList.add(String.format("%04d", instructCode));
                 Linker.instructErrors.add("Error: External address exceeds length of uselist; treated as immediate");
                 }
 
             }
             }
-            
         }
+
         public static String nextTokenSpec(Matcher m) throws IOException{
             boolean flag = false;
             m.find();
             String token = m.group();
-           //System.out.println("token: *"+token+ "*, start: "+m.start()+ ", end: " + m.end() + ", line: " + Linker.realLineNumber + ", bol index: "+Linker.bolIndex);
+            //System.out.println("token: *"+token+ "*, start: "+m.start()+ ", end: " + m.end() + ", line: " + Linker.realLineNumber + ", bol index: "+Linker.bolIndex);
 
             //System.out.println("token in nextTokenSpec: " + token);
             Linker.oldOffsetCounter = Linker.endOffset;
             Linker.oldLineNumber = Linker.realLineNumber;
-            if (isEOL(token)){
-                Linker.realLineNumber++;
-            }
+           
+
             int count=0;
 
             while (isEOL(token)){
-
-                if (m.end() == Linker.eofIndex){
-                    Linker.realLineNumber = Linker.oldLineNumber;
-                    Linker.offsetCounter = Linker.endOffset;
-                    break;
-                }
-
+            //System.out.println("line #: "+Linker.realLineNumber);
                 count++;
                 flag = true;
-                if (count>1){
+                if (m.end() == Linker.eofIndex){
+                    //System.out.println("reached end of file token -- count: "+count);
+                    if (count<=2){
+                    Linker.realLineNumber = Linker.oldLineNumber;
+                    Linker.offsetCounter = Linker.endOffset;
+                    }
+                    if (count>2){
+                        Linker.realLineNumber--;
+                    }
+                    break;
+                }
                 Linker.realLineNumber++;
-            }
+
                 m.find();
                 if (flag == true){
                     Linker.bolIndex = m.start();
