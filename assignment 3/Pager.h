@@ -6,27 +6,32 @@ typedef list<Frame*> FrameList;
 
 class Pager{
 public:
-	Pager(Frame* ft):frame_table{ft}
+	Pager(Frame* ft)
 	{
+		frame_table=ft;
 		for (int i =0;i<(sizeof(ft)/sizeof(ft[0]));++i){
 	    	freeList.push_back(&(ft[i]));
 	    }
 	};
 	int get_frame();
 	int allocate_frame_from_free_list();
-	void page_in(Frame frame);
-	void page_out(Frame frame);
-	void zero(Frame frame);
-	void map(Frame frame);
-	void unmap(Frame frame);
-	void update_pte(Frame frame);
+	page_in(Frame frame);
+	page_out(Frame frame);
+	zero(Frame frame);
+	map(Page page, int frameIndex);
+	unmap(Frame frame);
+	update_pte(Page page, bool write);
 	FrameList freeList;
 	Frame* frame_table;
-	virtual int allocate_frame();
+	virtual int allocate_frame(){
+	//do nothing
+	};
 };
 
-class LRU : public Pager{
+class LRU : public Pager {
 public:
+	LRU(Frame* ft)
+	: Pager(ft){};
 	int allocate_frame(){
 		int minCount = 2^32-1;
 		int lruFrameIndex;
@@ -62,20 +67,20 @@ int Pager::get_frame(){
 	return frameIndex;
 }
 
-Pager::update_pte(Frame frame,bool write){
+int Pager::update_pte(Page page,bool write){
 	if (!write){
-		frame.page->REFERENCED=1;
+		page.REFERENCED=1;
 	} else{
-		frame.page->MODIFIED=1;
+		page.MODIFIED=1;
 	}
 }
 
-Pager::map(Page pte,int frameIndex){
+int Pager::map(Page pte,int frameIndex){
 	pte.frame = frameIndex;
 	pte.PRESENT = 1;
 }
 
-Pager::zero(Frame frame){
+int Pager::zero(Frame frame){
 	frame.page->PRESENT=0;
 	frame.page->PAGEDOUT=0;
 }
@@ -85,7 +90,7 @@ Pager::page_out(Frame frame){
 	frame.page->PRESENT=0;
 }
 
-Pager::page_in(Frame frame){
+int Pager::page_in(Frame frame){
 	frame.page->PAGEDOUT=0;
 	frame.page->PRESENT =1;
 }
