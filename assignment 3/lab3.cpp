@@ -20,7 +20,6 @@ int nFrames = 16;
 
 	string inputFileName = argv[numOptions+1];
 	string randFileName = argv[numOptions+2];
-	cout<<"inputFileName: "<<inputFileName<<endl;
 	
 	Sim sim(inputFileName,nFrames);
 	ifstream randFile (randFileName.c_str());

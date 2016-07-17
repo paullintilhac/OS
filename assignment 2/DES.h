@@ -1,6 +1,7 @@
 #include <string>
 #include <list>
 #include <sstream>
+#include <fstream>
 #include "Event.h"
 #include "Process.h"
 #include "Scheduler.h"

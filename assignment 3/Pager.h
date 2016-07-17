@@ -20,7 +20,7 @@ public:
 	zero(Frame frame);
 	map(Page page, int frameIndex);
 	unmap(Frame frame);
-	update_pte(Page page, bool write);
+	update_pte(Page page, int write);
 	FrameList freeList;
 	Frame* frame_table;
 	virtual int allocate_frame(){
@@ -67,7 +67,7 @@ int Pager::get_frame(){
 	return frameIndex;
 }
 
-int Pager::update_pte(Page page,bool write){
+int Pager::update_pte(Page page,int write){
 	if (!write){
 		page.REFERENCED=1;
 	} else{
@@ -78,6 +78,11 @@ int Pager::update_pte(Page page,bool write){
 int Pager::map(Page pte,int frameIndex){
 	pte.frame = frameIndex;
 	pte.PRESENT = 1;
+	pte.locked = false;
+}
+
+int Pager::unmap(Page pte){
+	pte.frame.locked = true;
 }
 
 int Pager::zero(Frame frame){

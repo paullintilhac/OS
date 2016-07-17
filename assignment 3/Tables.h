@@ -15,6 +15,7 @@ public:
 		REFERENCED = 0;
 		PAGEDOUT = 0;
 		referenceCount =0;
+		frame = 0;
 	}
 	unsigned int PRESENT:1;
 	unsigned int MODIFIED:1;
@@ -26,9 +27,12 @@ public:
 
 class Frame{
 public:
-	
+	Frame(){
+		referenceCount = 0;
+		locked = false;
+		page = new Page();
+	}
 	Page *page;
-	int index;
 	int referenceCount;
 	bool locked;
 	//also linkage, not sure what that is
