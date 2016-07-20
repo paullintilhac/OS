@@ -14,7 +14,6 @@ public:
 		MODIFIED = 0;
 		REFERENCED = 0;
 		PAGEDOUT = 0;
-		referenceCount =0;
 		frame = 0;
 	}
 	unsigned int PRESENT:1;
@@ -31,7 +30,9 @@ public:
 		referenceCount = 0;
 		locked = false;
 		page = new Page();
+		pageNum = -1;
 	}
+	int pageNum;
 	Page *page;
 	int referenceCount;
 	bool locked;

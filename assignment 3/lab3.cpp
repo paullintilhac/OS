@@ -14,13 +14,13 @@ bool F;
 bool S;
 int quantum=100000000;
 int numOptions = argc-3;
-int nFrames = 16;
+int nFrames = 4;
 
 
 
 	string inputFileName = argv[numOptions+1];
 	string randFileName = argv[numOptions+2];
-	
+	cout<<"nFrames: "<<nFrames<<endl;
 	Sim sim(inputFileName,nFrames);
 	ifstream randFile (randFileName.c_str());
 }
