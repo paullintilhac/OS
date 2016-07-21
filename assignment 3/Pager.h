@@ -6,7 +6,7 @@ typedef list<Frame*> FrameList;
 
 class Pager{
 public:
-	Pager(Frame* ft, int size)
+	Pager(Frame* ft, const int size)
 	{
 		frame_table=ft;
 		nFrames = size;
@@ -26,8 +26,12 @@ public:
 	update_pte(Page *page, int write);
 	FrameList freeList;
 	Frame* frame_table;
+	Frame class_o[], class_1[], class_2[], class_3[];
+	
 	int referenceCount;
 	int nFrames;
+
+
 	virtual int allocate_frame(){
 	//do nothing
 	};

@@ -1,0 +1,52 @@
+gradeit.sh myout outputs outputs/LOG
+diff -b -q --speed-large-files myout/out_in18_4_N_OPFS outputs/out_in18_4_N_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+diff -b -q --speed-large-files myout/out_in18_4_r_OPFS outputs/out_in18_4_r_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+diff -b -q --speed-large-files myout/out_in18_4_f_OPFS outputs/out_in18_4_f_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+diff -b -q --speed-large-files myout/out_in18_4_s_OPFS outputs/out_in18_4_s_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+diff -b -q --speed-large-files myout/out_in18_4_c_OPFS outputs/out_in18_4_c_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+diff -b -q --speed-large-files myout/out_in18_4_X_OPFS outputs/out_in18_4_X_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+diff -b -q --speed-large-files myout/out_in18_4_a_OPFS outputs/out_in18_4_a_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+diff -b -q --speed-large-files myout/out_in18_4_Y_OPFS outputs/out_in18_4_Y_OPFS failed
+   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
+myout/out_in60_8_N_OPFS does not exist
+myout/out_in60_8_l_OPFS does not exist
+myout/out_in60_8_r_OPFS does not exist
+myout/out_in60_8_f_OPFS does not exist
+myout/out_in60_8_s_OPFS does not exist
+myout/out_in60_8_c_OPFS does not exist
+myout/out_in60_8_X_OPFS does not exist
+myout/out_in60_8_a_OPFS does not exist
+myout/out_in60_8_Y_OPFS does not exist
+myout/out_in1K4_16_N_OPFS does not exist
+myout/out_in1K4_16_l_OPFS does not exist
+myout/out_in1K4_16_r_OPFS does not exist
+myout/out_in1K4_16_f_OPFS does not exist
+myout/out_in1K4_16_s_OPFS does not exist
+myout/out_in1K4_16_c_OPFS does not exist
+myout/out_in1K4_16_X_OPFS does not exist
+myout/out_in1K4_16_a_OPFS does not exist
+myout/out_in1K4_16_Y_OPFS does not exist
+myout/out_in10K3_32_N_OPFS does not exist
+myout/out_in10K3_32_l_OPFS does not exist
+myout/out_in10K3_32_r_OPFS does not exist
+myout/out_in10K3_32_f_OPFS does not exist
+myout/out_in10K3_32_s_OPFS does not exist
+myout/out_in10K3_32_c_OPFS does not exist
+myout/out_in10K3_32_X_OPFS does not exist
+myout/out_in10K3_32_a_OPFS does not exist
+myout/out_in10K3_32_Y_OPFS does not exist
