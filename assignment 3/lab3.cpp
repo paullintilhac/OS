@@ -2,25 +2,73 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "Tables.h"
 #include "Sim.h"
 #include "Pager.h"
 using namespace std;
 int main(int argc, char* argv[]){
-string algoName;
+string algoName="LRU";
 bool O;
 bool P;
 bool F;
 bool S;
 int quantum=100000000;
 int numOptions = argc-3;
+cout<<"numOoptions: "<<numOptions<<endl;
 int nFrames = 4;
+bool physical=true;
+for (int i=0;i<numOptions;++i){
+	string optionString  = string(argv[i+1]);
+	string startChar = optionString.substr(0,2);
+	string rest = optionString.substr(2,optionString.length()-2);
+	
+		for (int j=0;j<rest.length();j++){
 
-
+			if (startChar == "-o"){
+				if (rest.at(j)=='O'){
+					O=true;}
+				if (rest.at(j)=='F'){
+					F=true;}
+				if (rest.at(j)=='P'){
+					P=true;}
+				if (rest.at(j)=='S'){
+					S=true;}
+			}
+			if (startChar == "-a"){
+				if (rest.at(j)=='N'){
+					algoName="NRU";
+					physical = false;}
+				if (rest.at(j)=='l'){
+					algoName = "LRU";
+					physical = true;}
+				if (rest.at(j)=='r'){
+					algoName = "Random";
+					physical=true;}
+				if (rest.at(j)=='f'){
+					algoName = "FIFO";
+					physical = true;}
+				if (rest.at(j)=='s'){
+					algoName = "SC";
+					physical = true;}
+				if (rest.at(j)=='c'){
+					algoName = "Clock";
+					physical = true;}
+				if (rest.at(j)=='X'){
+					algoName = "Clock";
+					physical= false;}
+			}
+	}
+	
+}
+ 	cout<<"algo name: "<<algoName<<", physical: "<<physical<<", O: "<<O<<", P: "<<P<<", F: "<<F<<", S: "<<S<<endl;
 
 	string inputFileName = argv[numOptions+1];
 	string randFileName = argv[numOptions+2];
 	cout<<"nFrames: "<<nFrames<<endl;
-	Sim sim(inputFileName,nFrames);
+	Sim sim(inputFileName,nFrames, algoName, physical,O,P,F,S);
 	ifstream randFile (randFileName.c_str());
 }
