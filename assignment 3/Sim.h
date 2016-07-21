@@ -4,10 +4,11 @@
 #include <sstream>
 #include "Tables.h"
 #include "Pager.h"
+#include "Rand.h"
 using namespace std;
 class Sim{
 public:
-	Sim(string inputFileName,int nf, string algoName, bool physical, bool O, bool P, bool F, bool S);
+	Sim(string inputFileName,int nf, string algoName, bool physical, bool O, bool P, bool F, bool S, Rand* rand);
 	Page page_table[64];
 	Frame* frame_table;
 	int nFrames;
@@ -21,7 +22,7 @@ public:
 
 };
 
-Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool p, bool f, bool s){
+Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool p, bool f, bool s,Rand* rand){
 	instructNumber = 0;
 	unmaps=0;
 	maps = 0;
@@ -30,10 +31,27 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	outs = 0;
     nFrames = nf;
    	frame_table= new Frame[nf];
-   
-   		pager = new LRU(frame_table,nf);
-   	
-	
+   	Pager* pager;
+   	if (algoName=="NRU"){
+   		cout<<"using NRU algo"<<endl;
+   	   	pager= new NRU(frame_table, nf, rand);
+   	}
+   	if (algoName =="LRU"){
+   		pager = new LRU(frame_table,nf,rand);
+   	}
+   	if (algoName == "Random"){
+   		pager = new Random(frame_table,nf,rand);
+   	}
+   	if (algoName == "Clock"){
+   		pager = new Random(frame_table,nf,rand);
+   	}
+   	if (algoName == "FIFO"){
+   		pager = new Random(frame_table,nf,rand);
+   	}
+   	if (algoName == "SC"){
+   		pager = new Random(frame_table,nf,rand);
+   	}
+
 	//cout<<"inputFileName: "<<inputFileName<<endl;
 	ifstream infile (inputFileName.c_str());
 	string str;
@@ -94,7 +112,7 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    	maps++;
 	    }
 	    pager->update_pte(&(page_table[pageNum]),write);
-
+	    pager->classes.update(page_table[pageNum]);
 	    //reset every 10 references
 	    if (pager->referenceCount==10){
 	    	for (int i=0; i<(sizeof(page_table)/sizeof(page_table[0]));++i){
@@ -143,8 +161,8 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 		cout<<endl;
 	}
 	if (s){
-		//int totalCost = ;
+		unsigned int long long totalCost = (400*(maps+unmaps)+3000*(ins+outs)+zeros*150+instructNumber);
 		printf("SUM %d U=%d M=%d I=%d O=%d Z=%d ===> %llu\n",
-			instructNumber,unmaps,maps,ins,outs,zeros,400*(maps+unmaps)+3000*(ins+outs)+zeros*150+instructNumber);
+			instructNumber,unmaps,maps,ins,outs,zeros,totalCost);
 	}
 }

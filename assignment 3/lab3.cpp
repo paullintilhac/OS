@@ -9,6 +9,7 @@
 #include "Tables.h"
 #include "Sim.h"
 #include "Pager.h"
+#include "Rand.h"
 using namespace std;
 int main(int argc, char* argv[]){
 string algoName="LRU";
@@ -69,6 +70,7 @@ for (int i=0;i<numOptions;++i){
 
 	string inputFileName = argv[numOptions+1];
 	string randFileName = argv[numOptions+2];
-	Sim sim(inputFileName,nFrames, algoName, physical,O,P,F,S);
 	ifstream randFile (randFileName.c_str());
+	Rand* rand = new Rand(randFileName);
+	Sim sim(inputFileName,nFrames, algoName, physical,O,P,F,S,rand);
 }

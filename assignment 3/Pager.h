@@ -2,11 +2,13 @@
 #define PAGER_H
 #include <list>
 #include "Tables.h"
+#include "Rand.h"
 typedef list<Frame*> FrameList;
 
 class Pager{
 public:
-	Pager(Frame* ft, const int size)
+	Pager(Frame* ft, const int size,Rand* r)
+	:  classes(size,rand)
 	{
 		frame_table=ft;
 		nFrames = size;
@@ -14,6 +16,7 @@ public:
 	    	freeList.push_back(&(ft[i]));
 	    }
 	    referenceCount =0;
+	    this->rand = r;
 	};
 
 	int get_frame();
@@ -26,8 +29,8 @@ public:
 	update_pte(Page *page, int write);
 	FrameList freeList;
 	Frame* frame_table;
-	Frame class_o[], class_1[], class_2[], class_3[];
-	
+	Class classes;
+	Rand* rand;
 	int referenceCount;
 	int nFrames;
 
@@ -39,8 +42,8 @@ public:
 
 class LRU : public Pager {
 public:
-	LRU(Frame* ft,int size)
-	: Pager(ft, size){};
+	LRU(Frame* ft,int size,Rand* rand)
+	: Pager(ft, size, rand){};
 	int allocate_frame(){
 		//cout<<"inside allocate frame"<<endl;
 		int minCount = frame_table[0].page->referenceCount;
@@ -53,6 +56,28 @@ public:
 			}
 		}
 		return lruFrameIndex;
+	}
+};
+
+class NRU : public Pager {
+public: 
+	NRU(Frame* ft, int size, Rand* rand)
+	: Pager(ft, size, rand){
+	};
+	int allocate_frame(){
+
+		int frameNumber = classes.get_frame_number();
+		return frameNumber;
+	}
+};
+
+class Random : public Pager {
+public:
+	Random(Frame* ft, int size, Rand* rand)
+	: Pager(ft,size,rand){};
+	int allocate_frame(){
+		int frameNumber = rand->myrandom(nFrames);
+		return(frameNumber);
 	}
 };
 
