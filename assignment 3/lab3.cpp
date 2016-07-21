@@ -18,7 +18,6 @@ bool F;
 bool S;
 int quantum=100000000;
 int numOptions = argc-3;
-cout<<"numOoptions: "<<numOptions<<endl;
 int nFrames = 4;
 bool physical=true;
 for (int i=0;i<numOptions;++i){
@@ -61,14 +60,15 @@ for (int i=0;i<numOptions;++i){
 					algoName = "Clock";
 					physical= false;}
 			}
+			if (startChar == "-f"){
+				nFrames = stoi(rest);
+			}
 	}
-	
 }
- 	cout<<"algo name: "<<algoName<<", physical: "<<physical<<", O: "<<O<<", P: "<<P<<", F: "<<F<<", S: "<<S<<endl;
+ 	//cout<<"algo name: "<<algoName<<", physical: "<<physical<<", O: "<<O<<", P: "<<P<<", F: "<<F<<", S: "<<S<<endl;
 
 	string inputFileName = argv[numOptions+1];
 	string randFileName = argv[numOptions+2];
-	cout<<"nFrames: "<<nFrames<<endl;
 	Sim sim(inputFileName,nFrames, algoName, physical,O,P,F,S);
 	ifstream randFile (randFileName.c_str());
 }
