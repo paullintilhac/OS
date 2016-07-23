@@ -42,7 +42,6 @@ public:
 class Class{
 public:
 	Class(int nFrames, Rand* r):nFrames{nFrames}{
-		cout<<"rand numCount in classes constructor: "<<r->numRand<<endl;
 		class_0 = new bool[nFrames];
 		class_1 = new bool[nFrames];
 		class_2 = new bool[nFrames];
@@ -109,10 +108,14 @@ public:
 				}
 			}
 			counts[3]=sum;
-			
+			/*
+			for (int i=0;i<4;++i){
+				cout<<"counts["<<i<<"]: "<<counts[i]<<endl;
+			}
+			*/
 	}
 
-	int get_frame_number(){
+	int get_page_number(){
 		int lowestClass = 0;
 		for (int i=0;i<4;++i){
 			lowestClass = i;
@@ -120,9 +123,7 @@ public:
 				break;
 			}
 		}
-		cout<<"lowest class: "<<lowestClass<<", counts[lowestClass]: "<<counts[lowestClass]<<endl;
 		int frameIndex = rand->myrandom(counts[lowestClass]);
-		cout<<"frame index: "<<frameIndex<<endl;
 		return frameIndex;
 	}
 

@@ -26,15 +26,12 @@ public:
 		this->randVec = vec;
 		this->randCount = 0;
 		randStream.close();
-		cout<<"set numRand to "<<numCount<<endl;
 		};
 
 
 		myrandom(int burst){
-			cout<<" burst: "<<burst<<endl;
-			cout<<"num rand: "<<numRand<<endl;	
-		//	cout<<"randCount: "<<randCount<<", numRand: "<<numRand<<", burst: "<<burst<<endl;
 		    int returnVal= randVec[randCount%numRand]%burst;
+		    //cout<<"random val: "<<returnVal<<endl;
 		    randCount++;
 		    return returnVal;
 		}

@@ -1,21 +1,26 @@
 #ifndef PAGER_H
 #define PAGER_H
 #include <list>
+#include <bitset>
 #include "Tables.h"
 #include "Rand.h"
 typedef list<Frame*> FrameList;
+typedef list<int> IntList;
 
 class Pager{
 public:
 	Pager(Frame* ft, const int size,Rand* r)
-	:  classes(size,rand)
+	:  classes(size,r)
 	{
 		frame_table=ft;
 		nFrames = size;
 		for (int i =0;i<size;++i){
 	    	freeList.push_back(&(ft[i]));
+	    	fifoList.push_back(i);
 	    }
 	    referenceCount =0;
+	    int startIndex= 0;
+	    i=fifoList.begin();
 	    this->rand = r;
 	};
 
@@ -26,18 +31,29 @@ public:
 	zero(Frame frame);
 	map(Page *page, int frameIndex, int pageNum);
 	unmap(Page *page);
-	update_pte(Page *page, int write);
 	FrameList freeList;
+	list<int> fifoList;
 	Frame* frame_table;
 	Class classes;
 	Rand* rand;
 	int referenceCount;
 	int nFrames;
+	list<int>::iterator i;
 
-
+	virtual int update_pte(Page *page, int write){
+		referenceCount++;
+		page->referenceCount = referenceCount;
+		if (!write){
+			page->REFERENCED=1;
+		} else {
+			page->REFERENCED=1;
+			page->MODIFIED=1;
+		}
+	}
 	virtual int allocate_frame(){
 	//do nothing
 	};
+
 };
 
 class LRU : public Pager {
@@ -61,12 +77,15 @@ public:
 
 class NRU : public Pager {
 public: 
-	NRU(Frame* ft, int size, Rand* rand)
+	NRU(Frame* ft, Page* pt,int size, Rand* rand)
 	: Pager(ft, size, rand){
+		page_table =pt; 
 	};
+	Page* page_table;
 	int allocate_frame(){
-
-		int frameNumber = classes.get_frame_number();
+		
+		int pageNumber = classes.get_page_number();
+		int frameNumber = page_table[pageNumber].frame;
 		return frameNumber;
 	}
 };
@@ -78,6 +97,118 @@ public:
 	int allocate_frame(){
 		int frameNumber = rand->myrandom(nFrames);
 		return(frameNumber);
+	}
+};
+
+class FIFO : public Pager {
+public:
+	FIFO(Frame* ft, int size, Rand* rand)
+	: Pager(ft,size,rand){};
+	int allocate_frame(){
+		int frameNumber = fifoList.front();
+		fifoList.pop_front();
+		fifoList.push_back(frameNumber);
+		return(frameNumber);
+	}
+};
+
+class Clock : public Pager {
+public:
+	Clock(Frame* ft,Page* pt, int size, Rand* rand,bool phys)
+	: Pager(ft, size, rand){
+		page_table = pt;
+		physical = phys;
+	};
+	Page* page_table;
+	bool physical;
+	int allocate_frame(){
+		//cout<<"clock pointer: "<<*i<<endl;
+		int count = 0;
+		while (frame_table[(*i)].page->REFERENCED==1){
+			//cout<<"count: "<<++count<<", frameIndex: "<<*i<<endl;
+			frame_table[(*i)].page->REFERENCED=0;
+			i++;
+			if (i==fifoList.end()){
+				i=fifoList.begin();
+			}
+		}
+		//cout<<"frameIndex to be replaced: "<<*i<<endl;
+		int frameNumber = (*i);
+		i++;
+		if (i==fifoList.end()){
+			i=fifoList.begin();
+		}
+		if (!physical){
+			frameNumber = page_table[frameNumber].frame;
+		}
+		//cout<<"frameindex after advancing: "<<*i<<endl;
+		return frameNumber;
+	};
+
+	virtual update_pte(Page *page, int write){ 
+		referenceCount++;
+		page->referenceCount = referenceCount;
+		if (referenceCount==9){
+	    	for (int i=0; i<(sizeof(page_table)/sizeof(page_table[0]));++i){
+	    		page_table[i].REFERENCED =0;
+	    		classes.update(page_table[i]);
+	    	}
+		}
+		if (!write){
+			page->REFERENCED=1;
+		} else {
+			page->REFERENCED=1;
+		
+			page->MODIFIED=1;
+		}	
+	}
+};
+
+class SC : public Pager {
+public: 
+	SC(Frame* ft, int size, Rand* rand)
+	: Pager(ft,size,rand){};
+	int allocate_frame(){
+		int count = 0;
+		while (frame_table[(*i)].page->REFERENCED==1){
+			//cout<<"count: "<<++count<<", frameIndex: "<<*i<<endl;
+			frame_table[(*i)].page->REFERENCED=0;
+			i++;
+			if (i==fifoList.end()){
+				i=fifoList.begin();
+			}
+		}
+		//cout<<"frameIndex to be replaced: "<<*i<<endl;
+		int frameNumber = (*i);
+		i++;
+		if (i==fifoList.end()){
+			i=fifoList.begin();
+		}
+		return frameNumber;
+
+	}		
+
+};
+
+class Aging : public Pager {
+public:
+	Aging(Frame* ft,Page* pt,int size, Rand* rand)
+	: Pager(ft,size,rand){
+		page_table = pt;
+		bitCounter = 0;
+		cout<<"bitset initial values: "<<bitCounter<<endl;
+	};
+	bitset<32> bitCounter;
+	Page* page_table;
+	int update_pte(Page *page, int write){
+		referenceCount++;
+		page->referenceCount = referenceCount;
+		if (!write){
+			page->REFERENCED=1;
+		} else {
+			page->REFERENCED=1;
+			page->MODIFIED=1;
+		}
 	}
 };
 
@@ -106,16 +237,6 @@ int Pager::get_frame(){
 	return frameIndex;
 }
 
-int Pager::update_pte(Page *page,int write){
-	referenceCount++;
-	page->referenceCount = referenceCount;
-	if (!write){
-		page->REFERENCED=1;
-	} else {
-		page->REFERENCED=1;
-		page->MODIFIED=1;
-	}
-}
 
 int Pager::map(Page *pte,int frameIndex, int pageIndex){
 	pte->frame = frameIndex;

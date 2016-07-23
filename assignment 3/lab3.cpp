@@ -60,6 +60,14 @@ for (int i=0;i<numOptions;++i){
 				if (rest.at(j)=='X'){
 					algoName = "Clock";
 					physical= false;}
+				if (rest.at(j)=='a'){
+					algoName = "Aging";
+					physical= true;
+				}
+				if (rest.at(j)=='Y'){
+					algoName = "Aging";
+					physical = false;
+				}
 			}
 			if (startChar == "-f"){
 				nFrames = stoi(rest);
