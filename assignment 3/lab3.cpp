@@ -66,8 +66,7 @@ for (int i=0;i<numOptions;++i){
 				}
 				if (rest.at(j)=='Y'){
 					algoName = "Aging";
-					physical = false;
-				}
+					physical = false;}
 			}
 			if (startChar == "-f"){
 				nFrames = stoi(rest);

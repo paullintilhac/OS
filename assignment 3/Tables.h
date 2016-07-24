@@ -21,7 +21,7 @@ public:
 	unsigned int REFERENCED:1;
 	unsigned int PAGEDOUT:1;
 	unsigned int frame:10;
-	int referenceCount;
+	
 };
 
 class Frame{
@@ -108,11 +108,11 @@ public:
 				}
 			}
 			counts[3]=sum;
-			/*
-			for (int i=0;i<4;++i){
-				cout<<"counts["<<i<<"]: "<<counts[i]<<endl;
-			}
-			*/
+			
+			//for (int i=0;i<4;++i){
+			//	cout<<"counts["<<i<<"]: "<<counts[i]<<endl;
+			//}
+			
 	}
 
 	int get_page_number(){
@@ -124,6 +124,7 @@ public:
 			}
 		}
 		int frameIndex = rand->myrandom(counts[lowestClass]);
+		//cout<<"lowest class: "<<lowestClass<<", randval: "<<frameIndex<<endl;
 		return frameIndex;
 	}
 

@@ -33,7 +33,6 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
    	frame_table= new Frame[nf];
    	Pager* pager;
    	if (algoName=="NRU"){
-   		cout<<"using NRU algo"<<endl;
    	   	pager= new NRU(frame_table,page_table, nf, rand);
    	}
    	if (algoName =="LRU"){
@@ -52,37 +51,14 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
    		pager = new SC(frame_table,nf,rand);
    	}
    	if (algoName == "Aging"){
-   		pager = new Aging(frame_table,page_table,nf,rand);
+   		pager = new Aging(frame_table,page_table,nf,rand,physical);
    	}
-	//cout<<"inputFileName: "<<inputFileName<<endl;
+	cout<<"inputFileName: "<<endl;
 	ifstream infile (inputFileName.c_str());
 	string str;
 		while (getline(infile, str)) {
-		/*
-		//reset r bits for each page individually based on time since last reference>10
-	    for (int i=0; i<(sizeof(page_table)/sizeof(page_table[0]));++i){
-	    	if (pager->referenceCount-page_table[i].referenceCount==9){
-	    	page_table[i].REFERENCED =0;
-	    	pager->classes.update(page_table[i]);
-	    	}
-	    }
-	    */
-	    
-	    //reset all bits every 10 references globally
-	    /*
-		if (pager->referenceCount==9){
-	    	for (int i=0; i<(sizeof(page_table)/sizeof(page_table[0]));++i){
-	    		page_table[i].REFERENCED =0;
-	    		pager->classes.update(page_table[i]);
-	    	}
-	    }
-	    */
-	    
-	   // cout<<"***************"<<endl;
-	    //for (int i=0;i<4;i++){
-		//cout<<"R bit for frame "<<i<<": "<<frame_table[i].page->REFERENCED<<endl;	
-	    //}
-	    
+	
+	   
 	    istringstream iss(str);
 
 	    int write;
@@ -95,13 +71,12 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    if (o){
 	    cout<<"==> inst: "<<write<<" "<<pageNum<<endl;
 		}
+		Page *oldPage;
 	    if (page_table[pageNum].PRESENT == 0){
 	    	//cout<<"not present"<<endl;
-
 	    	int frameIndex = pager->get_frame();
 	    	//cout<<"frame index: "<<frameIndex<<", page num: "<<pageNum<<endl;
-
-	    	Page *oldPage = (frame_table[frameIndex].page);
+	    	oldPage = (frame_table[frameIndex].page);
 	    	if (frame_table[frameIndex].pageNum>=0){//-1 will be set before the first reference
 	    	//cout<<"page num not -1"<<endl;
 	    	if (o){
@@ -135,14 +110,16 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    	
 	    	if (o) {printf("%d: MAP     %2d %2d\n",instructNumber,pageNum,frameIndex);}
 	    	pager->map(&(page_table[pageNum]),frameIndex,pageNum);
+	    	
 	    	maps++;
 	    }
+	  
 	    pager->update_pte(&(page_table[pageNum]),write);
 	    //reset every 10 references
-
+	  
 	   	pager->classes.update(page_table[pageNum]);
 
-	    		++instructNumber;
+	    ++instructNumber;
 
 
 	}

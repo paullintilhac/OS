@@ -20,7 +20,6 @@ public:
 	    }
 	    referenceCount =0;
 	    int startIndex= 0;
-	    i=fifoList.begin();
 	    this->rand = r;
 	};
 
@@ -36,13 +35,12 @@ public:
 	Frame* frame_table;
 	Class classes;
 	Rand* rand;
+	unsigned int *referenceCounters;
 	int referenceCount;
 	int nFrames;
-	list<int>::iterator i;
 
 	virtual int update_pte(Page *page, int write){
-		referenceCount++;
-		page->referenceCount = referenceCount;
+
 		if (!write){
 			page->REFERENCED=1;
 		} else {
@@ -53,25 +51,43 @@ public:
 	virtual int allocate_frame(){
 	//do nothing
 	};
+	virtual int touch(Page* page){
+		//do nothing
+	}
 
 };
 
 class LRU : public Pager {
 public:
 	LRU(Frame* ft,int size,Rand* rand)
-	: Pager(ft, size, rand){};
+	: Pager(ft, size, rand){
+		referenceCounters = new unsigned int[size];
+		for (int i=0; i<size;i++){
+			referenceCounters[i]=0;
+		}
+	};
 	int allocate_frame(){
 		//cout<<"inside allocate frame"<<endl;
-		int minCount = frame_table[0].page->referenceCount;
+		int minCount = referenceCounters[0];
 		int lruFrameIndex=0;
 		for (int i=0;i<nFrames;++i){
-			//cout<<"i: "<<i<<", minCount: "<<minCount<<", lruFrameIndex: "<<lruFrameIndex<<endl;
-			if (frame_table[i].page->referenceCount<minCount){
+			//cout<<"counter: "<<referenceCounters[i]<<", minCount: "<<minCount<<", lruFrameIndex: "<<lruFrameIndex<<endl;
+			if (referenceCounters[i]<minCount){
 				lruFrameIndex = i;
-				minCount = frame_table[i].page->referenceCount;
+				minCount = referenceCounters[i];
 			}
 		}
 		return lruFrameIndex;
+	}
+	virtual int update_pte(Page *page, int write){
+		referenceCount++;
+		referenceCounters[page->frame] = referenceCount;
+		if (!write){
+			page->REFERENCED=1;
+		} else {
+			page->REFERENCED=1;
+			page->MODIFIED=1;
+		}
 	}
 };
 
@@ -83,11 +99,42 @@ public:
 	};
 	Page* page_table;
 	int allocate_frame(){
-		
 		int pageNumber = classes.get_page_number();
-		int frameNumber = page_table[pageNumber].frame;
+		int idx = 0;
+		int frameNumber =0;
+		for (int i=0;i<64;++i){
+			if (page_table[i].PRESENT ==1){
+				if (idx==pageNumber){
+					frameNumber = page_table[i].frame;
+					break;
+				}
+				idx++;
+			}
+		}
 		return frameNumber;
 	}
+	virtual update_pte(Page *page, int write){ 
+		referenceCount++;
+		if (!write){
+			page->REFERENCED=1;
+		} else {
+			page->REFERENCED=1;
+		
+			page->MODIFIED=1;
+		}
+		if (referenceCount==10){
+
+	    	for (int i=0; i<64;++i){
+	    		classes.update(page_table[i]);
+	    		page_table[i].REFERENCED =0;
+	    	}
+	    	//for (int i=0;i<4;i++){
+			//cout<<"R bit for frame "<<i<<": "<<frame_table[i].page->REFERENCED<<endl;	
+	   		// }
+	    
+		}
+		
+	}	
 };
 
 class Random : public Pager {
@@ -118,25 +165,49 @@ public:
 	: Pager(ft, size, rand){
 		page_table = pt;
 		physical = phys;
+		int listSize;
+		if (physical){
+			listSize = size;
+		} else{
+			listSize = 64;
+		}
+		for (int i=0;i<listSize;++i){
+			clockList.push_back(i);
+		}
+		i = clockList.begin();
 	};
 	Page* page_table;
+	list<int>::iterator i;
+	list<int> clockList;
+
 	bool physical;
 	int allocate_frame(){
 		//cout<<"clock pointer: "<<*i<<endl;
 		int count = 0;
+		if (physical){
 		while (frame_table[(*i)].page->REFERENCED==1){
 			//cout<<"count: "<<++count<<", frameIndex: "<<*i<<endl;
 			frame_table[(*i)].page->REFERENCED=0;
 			i++;
-			if (i==fifoList.end()){
-				i=fifoList.begin();
+			if (i==clockList.end()){
+				i=clockList.begin();
 			}
+		}
+		} else{
+			while (page_table[(*i)].REFERENCED==1|page_table[(*i)].PRESENT==0){
+			//cout<<"count: "<<++count<<", frameIndex: "<<*i<<endl;
+			page_table[(*i)].REFERENCED=0;
+			i++;
+			if (i==clockList.end()){
+				i=clockList.begin();
+			}
+		}
 		}
 		//cout<<"frameIndex to be replaced: "<<*i<<endl;
 		int frameNumber = (*i);
 		i++;
-		if (i==fifoList.end()){
-			i=fifoList.begin();
+		if (i==clockList.end()){
+			i=clockList.begin();
 		}
 		if (!physical){
 			frameNumber = page_table[frameNumber].frame;
@@ -147,13 +218,7 @@ public:
 
 	virtual update_pte(Page *page, int write){ 
 		referenceCount++;
-		page->referenceCount = referenceCount;
-		if (referenceCount==9){
-	    	for (int i=0; i<(sizeof(page_table)/sizeof(page_table[0]));++i){
-	    		page_table[i].REFERENCED =0;
-	    		classes.update(page_table[i]);
-	    	}
-		}
+		
 		if (!write){
 			page->REFERENCED=1;
 		} else {
@@ -167,22 +232,29 @@ public:
 class SC : public Pager {
 public: 
 	SC(Frame* ft, int size, Rand* rand)
-	: Pager(ft,size,rand){};
+	: Pager(ft,size,rand){
+		for (int i=0;i<size;++i){
+			clockList.push_back(i);
+		}
+		i = clockList.begin();
+	};
+	list<int>::iterator i;
+	list<int> clockList;
 	int allocate_frame(){
 		int count = 0;
 		while (frame_table[(*i)].page->REFERENCED==1){
 			//cout<<"count: "<<++count<<", frameIndex: "<<*i<<endl;
 			frame_table[(*i)].page->REFERENCED=0;
 			i++;
-			if (i==fifoList.end()){
-				i=fifoList.begin();
+			if (i==clockList.end()){
+				i=clockList.begin();
 			}
 		}
 		//cout<<"frameIndex to be replaced: "<<*i<<endl;
 		int frameNumber = (*i);
 		i++;
-		if (i==fifoList.end()){
-			i=fifoList.begin();
+		if (i==clockList.end()){
+			i=clockList.begin();
 		}
 		return frameNumber;
 
@@ -192,17 +264,28 @@ public:
 
 class Aging : public Pager {
 public:
-	Aging(Frame* ft,Page* pt,int size, Rand* rand)
+	Aging(Frame* ft,Page* pt,int size, Rand* rand,bool p)
 	: Pager(ft,size,rand){
+		int counterSize;
+		physical = p;
+		if (physical){
+			counterSize = 64;
+		} else{
+			counterSize = size;
+		}
+		referenceCounters = new bitset<32>[counterSize];
+			for (int i=0;i<counterSize;++i)
+			{
+				referenceCounters[i]=0;
+			}
 		page_table = pt;
-		bitCounter = 0;
-		cout<<"bitset initial values: "<<bitCounter<<endl;
 	};
-	bitset<32> bitCounter;
+	bool physical;
 	Page* page_table;
+	bitset<32> *referenceCounters;
 	int update_pte(Page *page, int write){
 		referenceCount++;
-		page->referenceCount = referenceCount;
+
 		if (!write){
 			page->REFERENCED=1;
 		} else {
@@ -210,6 +293,45 @@ public:
 			page->MODIFIED=1;
 		}
 	}
+
+	int allocate_frame(){
+		int size;
+		if (physical){
+			size = nFrames;
+		} else{
+			size = 64;
+		}
+
+		for (int i=0;i<size;++i){
+
+			referenceCounters[i]>>=1;
+			if (physical){
+				if (frame_table[i].page->REFERENCED){
+					referenceCounters[i].set(31,1);
+					frame_table[i].page->REFERENCED = 0;
+				}
+			} else{
+				if (page_table[i].REFERENCED){
+					referenceCounters[i].set(31,1);
+					page_table[i].REFERENCED = 0;
+				}
+			}
+		}
+	
+		unsigned int minCount = (referenceCounters[0].to_ulong());
+		int lruFrameIndex=0;
+		for (int i=0;i<nFrames;++i){
+			unsigned int refInt = (referenceCounters[i].to_ulong());
+			//cout<<"counter: "<<referenceCounters[i]<<", i: "<<i<<endl;
+			if (refInt<minCount){
+				lruFrameIndex = i;
+				minCount = refInt;
+			}
+		}
+
+		return lruFrameIndex;
+	}
+	
 };
 
 
@@ -234,6 +356,7 @@ int Pager::get_frame(){
 	if (frameIndex == -1){
 		frameIndex =allocate_frame();
 	}
+
 	return frameIndex;
 }
 

@@ -1,24 +1,6 @@
 gradeit.sh myout outputs outputs/LOG
-diff -b -q --speed-large-files myout/out_in18_4_N_OPFS outputs/out_in18_4_N_OPFS failed
-   DIR1-SUM ==> 
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
-diff -b -q --speed-large-files myout/out_in18_4_f_OPFS outputs/out_in18_4_f_OPFS failed
-   DIR1-SUM ==> 
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
-diff -b -q --speed-large-files myout/out_in18_4_s_OPFS outputs/out_in18_4_s_OPFS failed
-   DIR1-SUM ==> 
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
-diff -b -q --speed-large-files myout/out_in18_4_c_OPFS outputs/out_in18_4_c_OPFS failed
-   DIR1-SUM ==> 
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
-diff -b -q --speed-large-files myout/out_in18_4_X_OPFS outputs/out_in18_4_X_OPFS failed
-   DIR1-SUM ==> 
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
-diff -b -q --speed-large-files myout/out_in18_4_a_OPFS outputs/out_in18_4_a_OPFS failed
-   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
 diff -b -q --speed-large-files myout/out_in18_4_Y_OPFS outputs/out_in18_4_Y_OPFS failed
-   DIR1-SUM ==> SUM 16 U=8 M=12 I=0 O=0 Z=12 ===> 9816
+   DIR1-SUM ==> 
    DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
 myout/out_in60_8_N_OPFS does not exist
 myout/out_in60_8_l_OPFS does not exist
