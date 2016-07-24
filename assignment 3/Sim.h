@@ -53,21 +53,20 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
    	if (algoName == "Aging"){
    		pager = new Aging(frame_table,page_table,nf,rand,physical);
    	}
-	cout<<"inputFileName: "<<endl;
+
 	ifstream infile (inputFileName.c_str());
 	string str;
-		while (getline(infile, str)) {
-	
-	   
-	    istringstream iss(str);
 
+		while (getline(infile, str)) {
+	    istringstream iss(str);
 	    int write;
 	    int pageNum;
-	 
-	    if (!(iss >> write >>pageNum)) { 
-	    	cout<<"iss is false in if statement, iss value: "<<iss.fail()<<endl;
+	 	
+	    if (!(iss >> write >>pageNum)) {
+	    	cout<<"iss is false in if statement, iss fail? "<<iss.fail()<<"iss good? "<<iss.good()<<", eof? "<<iss.eof()<<endl;
 	    	break;
-	    } 
+	    }
+		
 	    if (o){
 	    cout<<"==> inst: "<<write<<" "<<pageNum<<endl;
 		}
@@ -75,6 +74,8 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    if (page_table[pageNum].PRESENT == 0){
 	    	//cout<<"not present"<<endl;
 	    	int frameIndex = pager->get_frame();
+	    	int oldPageNum =  frame_table[frameIndex].pageNum;
+
 	    	//cout<<"frame index: "<<frameIndex<<", page num: "<<pageNum<<endl;
 	    	oldPage = (frame_table[frameIndex].page);
 	    	if (frame_table[frameIndex].pageNum>=0){//-1 will be set before the first reference
@@ -84,20 +85,18 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 			pager->unmap(oldPage);//unmap previous virtual page associated with selected frame
 			unmaps++;
 	    	}
-
 	    	if (oldPage->MODIFIED == 1){
-	    		//cout<<"modified"<<endl;
-	    		pager->page_out(frame_table[frameIndex]);//page out if dirty
+	    		pager->page_out(oldPage);//page out if dirty
 	    		outs++;
 	    		if (o){
-	    		printf("%d: OUT     %2d %2d\n",instructNumber,frame_table[oldPage->frame].pageNum,oldPage->frame);
+	    		printf("%d: OUT     %2d %2d\n",instructNumber,oldPageNum,frameIndex);
 	    		}
 	    	}
 
-	    	if (oldPage->PAGEDOUT ==1){
+	    	if (page_table[pageNum].PAGEDOUT ==1){
 	    		//cout<<"paged out"<<endl;
 	    		if (o) {printf("%d: IN      %2d %2d\n",instructNumber,pageNum,frameIndex);}
-	    		pager->page_in(frame_table[frameIndex]); //page in if paged out
+	    		pager->page_in(&(page_table[pageNum])); //page in if paged out
 	    		ins++;
 	    	}
 
@@ -107,21 +106,16 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
     		    pager->zero(frame_table[frameIndex]); //zero if already paged in
     		    zeros++;
 	    	}
-	    	
 	    	if (o) {printf("%d: MAP     %2d %2d\n",instructNumber,pageNum,frameIndex);}
 	    	pager->map(&(page_table[pageNum]),frameIndex,pageNum);
-	    	
 	    	maps++;
 	    }
 	  
 	    pager->update_pte(&(page_table[pageNum]),write);
-	    //reset every 10 references
 	  
 	   	pager->classes.update(page_table[pageNum]);
 
 	    ++instructNumber;
-
-
 	}
 	if (p){
 		for (int i=0;i<(sizeof(page_table)/sizeof(page_table[0]));++i){

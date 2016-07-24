@@ -1,16 +1,10 @@
 gradeit.sh myout outputs outputs/LOG
-diff -b -q --speed-large-files myout/out_in18_4_Y_OPFS outputs/out_in18_4_Y_OPFS failed
-   DIR1-SUM ==> 
-   DIR2-SUM ==> SUM 16 U=6 M=10 I=0 O=0 Z=10 ===> 7916
-myout/out_in60_8_N_OPFS does not exist
-myout/out_in60_8_l_OPFS does not exist
-myout/out_in60_8_r_OPFS does not exist
-myout/out_in60_8_f_OPFS does not exist
-myout/out_in60_8_s_OPFS does not exist
-myout/out_in60_8_c_OPFS does not exist
-myout/out_in60_8_X_OPFS does not exist
-myout/out_in60_8_a_OPFS does not exist
-myout/out_in60_8_Y_OPFS does not exist
+diff -b -q --speed-large-files myout/out_in60_8_N_OPFS outputs/out_in60_8_N_OPFS failed
+   DIR1-SUM ==> SUM 60 U=46 M=54 I=7 O=11 Z=47 ===> 101110
+   DIR2-SUM ==> SUM 60 U=39 M=47 I=3 O=9 Z=44 ===> 77060
+diff -b -q --speed-large-files myout/out_in60_8_Y_OPFS outputs/out_in60_8_Y_OPFS failed
+   DIR1-SUM ==> SUM 60 U=46 M=54 I=8 O=12 Z=46 ===> 106960
+   DIR2-SUM ==> SUM 60 U=43 M=51 I=6 O=11 Z=45 ===> 95410
 myout/out_in1K4_16_N_OPFS does not exist
 myout/out_in1K4_16_l_OPFS does not exist
 myout/out_in1K4_16_r_OPFS does not exist

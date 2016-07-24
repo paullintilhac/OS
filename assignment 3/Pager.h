@@ -25,8 +25,8 @@ public:
 
 	int get_frame();
 	int allocate_frame_from_free_list();
-	page_in(Frame frame);
-	page_out(Frame frame);
+	page_in(Page *page);
+	page_out(Page *page);
 	zero(Frame frame);
 	map(Page *page, int frameIndex, int pageNum);
 	unmap(Page *page);
@@ -50,7 +50,7 @@ public:
 	}
 	virtual int allocate_frame(){
 	//do nothing
-	};
+	}
 	virtual int touch(Page* page){
 		//do nothing
 	}
@@ -102,15 +102,21 @@ public:
 		int pageNumber = classes.get_page_number();
 		int idx = 0;
 		int frameNumber =0;
+		int pNum;
+		//cout<<"lowest class: "<<classes.lowestClass<<endl;
 		for (int i=0;i<64;++i){
-			if (page_table[i].PRESENT ==1){
+			if (page_table[i].PRESENT ==1 && classes.classVec[page_table[i].frame][classes.lowestClass]==true){
+				//cout<<"page num candidate: "<<i<<endl;
 				if (idx==pageNumber){
+					pNum = i;
 					frameNumber = page_table[i].frame;
 					break;
 				}
 				idx++;
 			}
 		}
+		//cout<<"randval: "<<pageNumber<<", selected page: "<<pNum<<", selected frame: "<<frameNumber<<endl;
+
 		return frameNumber;
 	}
 	virtual update_pte(Page *page, int write){ 
@@ -269,14 +275,15 @@ public:
 		int counterSize;
 		physical = p;
 		if (physical){
-			counterSize = 64;
-		} else{
 			counterSize = size;
+		} else{
+			counterSize = 64;
 		}
 		referenceCounters = new bitset<32>[counterSize];
 			for (int i=0;i<counterSize;++i)
 			{
 				referenceCounters[i]=0;
+				//cout<<"referenceCounters: "<<referenceCounters[i]<<endl;
 			}
 		page_table = pt;
 	};
@@ -304,31 +311,46 @@ public:
 
 		for (int i=0;i<size;++i){
 
-			referenceCounters[i]>>=1;
 			if (physical){
+				referenceCounters[i]>>=1;
 				if (frame_table[i].page->REFERENCED){
 					referenceCounters[i].set(31,1);
 					frame_table[i].page->REFERENCED = 0;
 				}
 			} else{
+				//cout<<"i: "<<i<<", counter before: "<<referenceCounters[i]<<endl;
+				referenceCounters[i]>>=1;
+				if (page_table[i].PRESENT==1){
 				if (page_table[i].REFERENCED){
 					referenceCounters[i].set(31,1);
+					//cout<<"counter after: "<<referenceCounters[i]<<endl;
 					page_table[i].REFERENCED = 0;
+				}
 				}
 			}
 		}
-	
-		unsigned int minCount = (referenceCounters[0].to_ulong());
+		unsigned int minCount;
+		if (physical){
+			 minCount= (referenceCounters[0].to_ulong());
+		} else{
+			minCount = (referenceCounters[frame_table[0].pageNum].to_ulong());
+		}
 		int lruFrameIndex=0;
-		for (int i=0;i<nFrames;++i){
+		for (int i=0;i<size;++i){
+			//cout<<"i: "<<i<<endl;
+			if (!physical && page_table[i].PRESENT==0){
+				continue;
+			}
+			//cout<<"actually processing "<<i<<endl;
 			unsigned int refInt = (referenceCounters[i].to_ulong());
-			//cout<<"counter: "<<referenceCounters[i]<<", i: "<<i<<endl;
 			if (refInt<minCount){
 				lruFrameIndex = i;
 				minCount = refInt;
 			}
 		}
-
+		if (!physical){
+			lruFrameIndex = page_table[lruFrameIndex].frame;
+		}
 		return lruFrameIndex;
 	}
 	
@@ -366,6 +388,7 @@ int Pager::map(Page *pte,int frameIndex, int pageIndex){
 	pte->PRESENT = 1;
 	frame_table[frameIndex].pageNum = pageIndex;
 	frame_table[frameIndex].page = pte;
+	//cout<<"setting frame "<<frameIndex<<" page number to "<<frame_table[frameIndex].pageNum<<endl;
 	//frame_table[frameIndex].locked = false;
 }
 
@@ -380,13 +403,15 @@ int Pager::zero(Frame frame){
 	//do nothing
 }
 
-Pager::page_out(Frame frame){
-	frame.page->PAGEDOUT=1;
+Pager::page_out(Page *page){
+	//cout<<"page number: "<<frame.pageNum<<endl;
+	page->PAGEDOUT=1;
 }
  
-int Pager::page_in(Frame frame){
-	frame.page->PAGEDOUT=0;
-	frame.page->PRESENT =1;
+int Pager::page_in(Page *page){
+	//page->PAGEDOUT=0;
+	page->PRESENT =1;
+	page->MODIFIED=0;
 }
 
 
