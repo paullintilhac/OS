@@ -12,6 +12,7 @@ public:
 	IOEventList ioQueue;
 	IOProcessList ioProcesses;
 	IOProcessList readyQueue;
+	int PREV_TRACK;
 	Sched(string iFile)
 	{
 		ifstream infile (iFile.c_str());
@@ -37,6 +38,7 @@ public:
 	    ioQueue.push_back(event);
 	 	//cout<<"time: "<<time<<", track: "<<track<<endl; 	
 	 	}
+	 	PREV_TRACK=0;
 	};
 	void add_process(IOProcess* p){
 		readyQueue.push_back(p);
@@ -86,11 +88,30 @@ public:
 class SSTF : public Sched {
 public:
 	SSTF(string iFile) : Sched(iFile){
-		
+		//cout<<"finished constructor of SSTF"<<endl;
 	}
 	
 	IOProcess* get_next_process(){
+		IOProcessList::iterator erasor = readyQueue.begin();
+		IOProcess* CURRENT_PROCESS;
+		if (readyQueue.size()>0){
+			int minDistance = abs(readyQueue.front()->track-PREV_TRACK);
+			int count = 0;
 
+			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
+				//cout<<"count: "<<count++<<endl;;
+				int distance = abs((*i)->track-PREV_TRACK);
+				if (distance<minDistance){
+					minDistance = distance;
+					erasor = i;
+				}
+			}
+			CURRENT_PROCESS = *erasor;
+			readyQueue.erase(erasor);
+		}else{
+			CURRENT_PROCESS= NULL;
+		}
+		return CURRENT_PROCESS;
 	}
 };
 

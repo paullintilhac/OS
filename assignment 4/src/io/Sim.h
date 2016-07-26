@@ -17,7 +17,6 @@ public:
 	Sched* sched;
 	int CURRENT_TIME;
 	bool CALL_SCHEDULER;
-	int PREV_TRACK;
 	IOProcess* CURRENT_RUNNING_PROCESS;
 };
 
@@ -38,7 +37,6 @@ Sim::Sim(string inputFileName,string algoName){
    		sched = new FSCAN(inputFileName);
    	}
    	CALL_SCHEDULER = false;
-   	PREV_TRACK=0;
    	CURRENT_RUNNING_PROCESS = NULL;
 }
 
@@ -52,7 +50,12 @@ Sim::run_simulation(){
 	float total_waittime=0;
 	float avg_waittime=0;
 	for (IOEventList::iterator i = sched->ioQueue.begin();i!=sched->ioQueue.end();++i){
+
 		count++;
+		if (count>50){
+			break;
+		}
+		//cout<<"count: "<<count<<endl;
 		CURRENT_TIME = i->timestamp;
 
 		IOProcess* p = i->process;
@@ -72,13 +75,13 @@ Sim::run_simulation(){
 			if (waittime>max_waittime){
 				max_waittime = waittime;
 			}
-			tot_movement+=abs(p->track-PREV_TRACK);
-			IOEvent finishEvent(CURRENT_TIME+abs(p->track-PREV_TRACK),p,"SEEK","DONE");
+			tot_movement+=abs(p->track-sched->PREV_TRACK);
+			IOEvent finishEvent(CURRENT_TIME+abs(p->track-sched->PREV_TRACK),p,"SEEK","DONE");
           	this->insert_event(finishEvent);
 		}
 
 		if (i->newState == "DONE"){
-			PREV_TRACK = p->track;
+			sched->PREV_TRACK = p->track;
 			total_turnaround+=CURRENT_TIME-p->startTS;
 			CALL_SCHEDULER=true;
 			CURRENT_RUNNING_PROCESS=NULL;
@@ -97,7 +100,7 @@ Sim::run_simulation(){
 	      	CALL_SCHEDULER = false;
 	      	if (CURRENT_RUNNING_PROCESS==NULL){
 	      	   CURRENT_RUNNING_PROCESS=sched->get_next_process();
-
+	      	   //printf("just got current running process: %p\n",CURRENT_RUNNING_PROCESS);
 	           if (CURRENT_RUNNING_PROCESS == NULL){
 	            //downTime+=nextTime-CURRENT_TIME;
 	            continue;
@@ -107,7 +110,7 @@ Sim::run_simulation(){
 	           
 	      	}
     	}
-		//cout<<"PREV_TRACK: "<<PREV_TRACK<<endl;
+		//cout<<"PREV_TRACK: "<<sched->PREV_TRACK<<endl;
 	}
 	avg_turnaround = total_turnaround/sched->ioProcesses.size();
 	avg_waittime = total_waittime/sched->ioProcesses.size();
