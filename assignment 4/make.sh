@@ -1,7 +1,10 @@
 #!/bin/bash
 
-g++ -std=gnu++11 -o iosched *.cpp
+g++ -std=gnu++11 -o src/io/sched src/io/*.cpp
 
-chmod +x iosched
+chmod +x src/io/sched
 
-./iosched -sf TestData/input0 
+cd TestData
+
+../src/io/sched -si input0 
+#./runit.sh myout
