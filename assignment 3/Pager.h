@@ -99,14 +99,32 @@ public:
 	};
 	Page* page_table;
 	int allocate_frame(){
-		int pageNumber = classes.get_page_number();
+		
 		int idx = 0;
 		int frameNumber =0;
 		int pNum;
-		//cout<<"lowest class: "<<classes.lowestClass<<endl;
+
+		//updates classification for all valid pages 
 		for (int i=0;i<64;++i){
+			if (page_table[i].PRESENT==1){
+		    		classes.update(&(frame_table[page_table[i].frame]));	
+		    		//cout<<"page: "<<frame_table[page_table[i].frame].pageNum<<", class: "<<frame_table[page_table[i].frame].classNumber<<endl;
+	    	}
+	    	if (referenceCount%10==9){
+		    			//cout<<"resetting reference bit for page "<<i<<endl;
+		    	page_table[i].REFERENCED =0;
+		    }
+
+	    }
+
+	    //randomly selects an page index in the lowest non-empty class
+	    int pageNumber = classes.get_page_number();
+
+	    //this piece of code steps through each valid page table entry with the correct class bit set until it finds the pageNumer-th page in that subset
+	   	for (int i=0;i<64;++i){
+
 			if (page_table[i].PRESENT ==1 && classes.classVec[page_table[i].frame][classes.lowestClass]==true){
-				//cout<<"page num candidate: "<<i<<endl;
+				
 				if (idx==pageNumber){
 					pNum = i;
 					frameNumber = page_table[i].frame;
@@ -114,33 +132,14 @@ public:
 				}
 				idx++;
 			}
+
+
 		}
 		//cout<<"randval: "<<pageNumber<<", selected page: "<<pNum<<", selected frame: "<<frameNumber<<endl;
 
 		return frameNumber;
 	}
-	virtual update_pte(Page *page, int write){ 
-		referenceCount++;
-		if (!write){
-			page->REFERENCED=1;
-		} else {
-			page->REFERENCED=1;
-		
-			page->MODIFIED=1;
-		}
-		if (referenceCount==10){
 
-	    	for (int i=0; i<64;++i){
-	    		classes.update(page_table[i]);
-	    		page_table[i].REFERENCED =0;
-	    	}
-	    	//for (int i=0;i<4;i++){
-			//cout<<"R bit for frame "<<i<<": "<<frame_table[i].page->REFERENCED<<endl;	
-	   		// }
-	    
-		}
-		
-	}	
 };
 
 class Random : public Pager {

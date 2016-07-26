@@ -61,6 +61,7 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    istringstream iss(str);
 	    int write;
 	    int pageNum;
+	 	pager->referenceCount++;
 	 	
 	    if (!(iss >> write >>pageNum)) {
 	    	cout<<"iss is false in if statement, iss fail? "<<iss.fail()<<"iss good? "<<iss.good()<<", eof? "<<iss.eof()<<endl;
@@ -70,6 +71,9 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    if (o){
 	    cout<<"==> inst: "<<write<<" "<<pageNum<<endl;
 		}
+
+		//cout<<"referenceCount: "<<pager->referenceCount<<endl;
+	 	
 		Page *oldPage;
 	    if (page_table[pageNum].PRESENT == 0){
 	    	//cout<<"not present"<<endl;
@@ -110,13 +114,11 @@ Sim::Sim(string inputFileName,int nf, string algoName,bool physical,bool o, bool
 	    	pager->map(&(page_table[pageNum]),frameIndex,pageNum);
 	    	maps++;
 	    }
-	  
-	    pager->update_pte(&(page_table[pageNum]),write);
-	  
-	   	pager->classes.update(page_table[pageNum]);
 
+	   	pager->update_pte(&(page_table[pageNum]),write);
 	    ++instructNumber;
 	}
+
 	if (p){
 		for (int i=0;i<(sizeof(page_table)/sizeof(page_table[0]));++i){
 			if (page_table[i].PRESENT==1){

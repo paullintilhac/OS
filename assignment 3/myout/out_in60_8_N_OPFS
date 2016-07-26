@@ -1,0 +1,228 @@
+==> inst: 1 10
+0: ZERO        0
+0: MAP     10  0
+==> inst: 1 30
+1: ZERO        1
+1: MAP     30  1
+==> inst: 1 4
+2: ZERO        2
+2: MAP      4  2
+==> inst: 0 27
+3: ZERO        3
+3: MAP     27  3
+==> inst: 0 15
+4: ZERO        4
+4: MAP     15  4
+==> inst: 0 19
+5: ZERO        5
+5: MAP     19  5
+==> inst: 0 14
+6: ZERO        6
+6: MAP     14  6
+==> inst: 1 43
+7: ZERO        7
+7: MAP     43  7
+==> inst: 0 24
+8: UNMAP   15  4
+8: ZERO        4
+8: MAP     24  4
+==> inst: 0 18
+9: UNMAP   14  6
+9: ZERO        6
+9: MAP     18  6
+==> inst: 0 5
+10: UNMAP   10  0
+10: OUT     10  0
+10: ZERO        0
+10: MAP      5  0
+==> inst: 0 30
+==> inst: 0 10
+12: UNMAP    4  2
+12: OUT      4  2
+12: IN      10  2
+12: MAP     10  2
+==> inst: 0 2
+13: UNMAP    5  0
+13: ZERO        0
+13: MAP      2  0
+==> inst: 1 4
+14: UNMAP    2  0
+14: IN       4  0
+14: MAP      4  0
+==> inst: 0 34
+15: UNMAP    4  0
+15: OUT      4  0
+15: ZERO        0
+15: MAP     34  0
+==> inst: 0 7
+16: UNMAP   10  2
+16: ZERO        2
+16: MAP      7  2
+==> inst: 0 14
+17: UNMAP    7  2
+17: ZERO        2
+17: MAP     14  2
+==> inst: 0 55
+18: UNMAP   14  2
+18: ZERO        2
+18: MAP     55  2
+==> inst: 0 28
+19: UNMAP   18  6
+19: ZERO        6
+19: MAP     28  6
+==> inst: 0 28
+==> inst: 0 40
+21: UNMAP   24  4
+21: ZERO        4
+21: MAP     40  4
+==> inst: 0 8
+22: UNMAP   28  6
+22: ZERO        6
+22: MAP      8  6
+==> inst: 1 44
+23: UNMAP   19  5
+23: ZERO        5
+23: MAP     44  5
+==> inst: 0 49
+24: UNMAP   34  0
+24: ZERO        0
+24: MAP     49  0
+==> inst: 0 1
+25: UNMAP   27  3
+25: ZERO        3
+25: MAP      1  3
+==> inst: 0 21
+26: UNMAP    1  3
+26: ZERO        3
+26: MAP     21  3
+==> inst: 1 8
+==> inst: 0 0
+28: UNMAP   30  1
+28: OUT     30  1
+28: ZERO        1
+28: MAP      0  1
+==> inst: 0 1
+29: UNMAP   21  3
+29: ZERO        3
+29: MAP      1  3
+==> inst: 0 54
+30: UNMAP    1  3
+30: ZERO        3
+30: MAP     54  3
+==> inst: 1 35
+31: UNMAP    8  6
+31: OUT      8  6
+31: ZERO        6
+31: MAP     35  6
+==> inst: 0 15
+32: UNMAP   43  7
+32: OUT     43  7
+32: ZERO        7
+32: MAP     15  7
+==> inst: 0 27
+33: UNMAP   40  4
+33: ZERO        4
+33: MAP     27  4
+==> inst: 0 21
+34: UNMAP   35  6
+34: OUT     35  6
+34: ZERO        6
+34: MAP     21  6
+==> inst: 0 0
+==> inst: 0 46
+36: UNMAP   21  6
+36: ZERO        6
+36: MAP     46  6
+==> inst: 1 24
+37: UNMAP   49  0
+37: ZERO        0
+37: MAP     24  0
+==> inst: 0 25
+38: UNMAP   24  0
+38: OUT     24  0
+38: ZERO        0
+38: MAP     25  0
+==> inst: 0 8
+39: UNMAP   54  3
+39: IN       8  3
+39: MAP      8  3
+==> inst: 0 3
+40: UNMAP    8  3
+40: ZERO        3
+40: MAP      3  3
+==> inst: 0 38
+41: UNMAP   44  5
+41: OUT     44  5
+41: ZERO        5
+41: MAP     38  5
+==> inst: 1 8
+42: UNMAP    3  3
+42: IN       8  3
+42: MAP      8  3
+==> inst: 0 40
+43: UNMAP    0  1
+43: ZERO        1
+43: MAP     40  1
+==> inst: 0 22
+44: UNMAP   27  4
+44: ZERO        4
+44: MAP     22  4
+==> inst: 1 17
+45: UNMAP   40  1
+45: ZERO        1
+45: MAP     17  1
+==> inst: 0 36
+46: UNMAP   38  5
+46: ZERO        5
+46: MAP     36  5
+==> inst: 0 44
+47: UNMAP   22  4
+47: IN      44  4
+47: MAP     44  4
+==> inst: 0 31
+48: UNMAP   15  7
+48: ZERO        7
+48: MAP     31  7
+==> inst: 0 42
+49: UNMAP   36  5
+49: ZERO        5
+49: MAP     42  5
+==> inst: 0 4
+50: UNMAP   17  1
+50: OUT     17  1
+50: IN       4  1
+50: MAP      4  1
+==> inst: 1 44
+==> inst: 0 38
+52: UNMAP   42  5
+52: ZERO        5
+52: MAP     38  5
+==> inst: 0 11
+53: UNMAP   31  7
+53: ZERO        7
+53: MAP     11  7
+==> inst: 0 6
+54: UNMAP   25  0
+54: ZERO        0
+54: MAP      6  0
+==> inst: 1 7
+55: UNMAP   11  7
+55: ZERO        7
+55: MAP      7  7
+==> inst: 0 5
+56: UNMAP   38  5
+56: ZERO        5
+56: MAP      5  5
+==> inst: 0 6
+==> inst: 0 10
+58: UNMAP    8  3
+58: OUT      8  3
+58: IN      10  3
+58: MAP     10  3
+==> inst: 0 42
+59: UNMAP    5  5
+59: ZERO        5
+59: MAP     42  5
+* * * * 4:R-S * 6:R-- 7:RM- # * 10:R-S * * * * * * # * * * * * * # * * * * * # * * * * # * * * * * * 42:R-- # 44:RMS * 46:R-- * * * * * * * * 55:R-- * * * * * * * * 
+6 4 55 10 44 42 46 7 
+SUM 60 U=46 M=54 I=7 O=11 Z=47 ===> 101110

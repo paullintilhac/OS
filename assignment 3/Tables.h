@@ -31,11 +31,13 @@ public:
 		locked = false;
 		page = new Page();
 		pageNum = -1;
+		classNumber = 0;
 	}
 	int pageNum;
 	Page *page;
 	int referenceCount;
 	bool locked;
+	int classNumber;
 	//also linkage, not sure what that is
 };
 
@@ -62,24 +64,32 @@ public:
 
 	bool (*classVec)[4];
 	Rand* rand;
-	update(Page pte){
+
+
+	update(Frame *frame){
+		Page pte = *(frame->page);
+		
 		for (int i=0;i<4;++i){
 			classVec[pte.frame][i]=false;
 		}
 
 		if (pte.REFERENCED==0 && pte.MODIFIED==0){
 			classVec[pte.frame][0]=true;
-		}
-		if (pte.REFERENCED==1 && pte.MODIFIED==0){
-			classVec[pte.frame][1]=true;
-
+			frame->classNumber = 0;
 		}
 		if (pte.REFERENCED==0 && pte.MODIFIED==1){
+			classVec[pte.frame][1]=true;
+			frame->classNumber = 1;
+		}
+		if (pte.REFERENCED==1 && pte.MODIFIED==0){
 			classVec[pte.frame][2]=true;
+			frame->classNumber = 2;
 		}
 		if (pte.REFERENCED==1 && pte.MODIFIED==1){
 			classVec[pte.frame][3]=true;
+			frame->classNumber = 3;
 		}
+		
 		for (int i=0;i<4;++i){
 			int sum = 0;
 			for (int j=0;j<nFrames;++j){
@@ -89,7 +99,6 @@ public:
 			}
 			counts[i]=sum;
 		}
-			
 			
 	}
 
@@ -103,7 +112,7 @@ public:
 		}
 		lowestClass = lowClass;
 		int frameIndex = rand->myrandom(counts[lowestClass]);
-		//cout<<"lowest class: "<<lowestClass<<", randval: "<<frameIndex<<endl;
+		//cout<<"lowest class: "<<lowestClass<<", # pages in lowest class: "<<counts[lowestClass]<<endl;
 		return frameIndex;
 	}
 
