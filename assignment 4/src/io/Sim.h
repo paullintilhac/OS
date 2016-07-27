@@ -50,7 +50,7 @@ Sim::run_simulation(){
 	float total_waittime=0;
 	float avg_waittime=0;
 	for (IOEventList::iterator i = sched->ioQueue.begin();i!=sched->ioQueue.end();++i){
-
+		bool TRACE = true;
 		count++;
 		if (count>50){
 			break;
@@ -67,6 +67,9 @@ Sim::run_simulation(){
 
     	if (i->newState =="READY"){
     	sched->add_process(p);
+    	if (TRACE){
+    	cout<<CURRENT_TIME<<":     "<<p->id<<" add "<<p->track<<endl;
+    	}
         CALL_SCHEDULER = true;
 		}
 		if (i->newState == "SEEK"){
@@ -77,14 +80,19 @@ Sim::run_simulation(){
 			}
 			tot_movement+=abs(p->track-sched->PREV_TRACK);
 			IOEvent finishEvent(CURRENT_TIME+abs(p->track-sched->PREV_TRACK),p,"SEEK","DONE");
+			sched->PREV_TRACK = p->track;
+
           	this->insert_event(finishEvent);
 		}
 
 		if (i->newState == "DONE"){
-			sched->PREV_TRACK = p->track;
+			if (TRACE){
+				cout<<CURRENT_TIME<<":     "<<p->id<<" finish "<<CURRENT_TIME-p->startTS<<endl;
+			}
 			total_turnaround+=CURRENT_TIME-p->startTS;
 			CALL_SCHEDULER=true;
 			CURRENT_RUNNING_PROCESS=NULL;
+
 			//do nothing
 		}
 
@@ -99,17 +107,23 @@ Sim::run_simulation(){
 	      	}
 	      	CALL_SCHEDULER = false;
 	      	if (CURRENT_RUNNING_PROCESS==NULL){
+	      	   //cout<<"about to get next process"<<endl;
 	      	   CURRENT_RUNNING_PROCESS=sched->get_next_process();
 	      	   //printf("just got current running process: %p\n",CURRENT_RUNNING_PROCESS);
 	           if (CURRENT_RUNNING_PROCESS == NULL){
 	            //downTime+=nextTime-CURRENT_TIME;
 	            continue;
 	           }
+	           if (TRACE){
+	           	cout<<CURRENT_TIME<<":     "<<CURRENT_RUNNING_PROCESS->id<<" issue "<<CURRENT_RUNNING_PROCESS->track<<" "<<sched->PREV_TRACK<<endl;
+	           }
+
 	           IOEvent seekEvent(i->timestamp,CURRENT_RUNNING_PROCESS,"READY","SEEK");
 	           this->insert_event(seekEvent);
 	           
 	      	}
     	}
+
 		//cout<<"PREV_TRACK: "<<sched->PREV_TRACK<<endl;
 	}
 	avg_turnaround = total_turnaround/sched->ioProcesses.size();

@@ -4,11 +4,13 @@ using namespace std;
 
 class IOProcess{
 public:
-	IOProcess(int startTime, int t){
+	IOProcess(int startTime, int t, int ID){
 		state_ts = startTime;
 		startTS = startTime;
 		track  = t;
+		id = ID;
 	}
+	int id;
  	int startTS,doneTS;
 	int track;
 	int state_ts;

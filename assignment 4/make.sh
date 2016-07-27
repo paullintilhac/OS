@@ -6,10 +6,10 @@ chmod +x src/io/sched
 
 cd TestData
 
-../src/io/sched -sj input0
+../src/io/sched -ss input0
 
-echo "************"
-echo reference output
-cat out_0_j
+#echo "************"
+#echo reference output
+#cat out_0_s_long
 
 #./runit.sh myout

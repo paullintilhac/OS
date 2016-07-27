@@ -13,11 +13,15 @@ public:
 	IOProcessList ioProcesses;
 	IOProcessList readyQueue;
 	int PREV_TRACK;
+	int end_track;
+	int max_track;
+	int direction;
 	Sched(string iFile)
-	{
+	{ 
+		direction = 1;
 		ifstream infile (iFile.c_str());
 		string str;
-
+		int id = 0;
 		while (getline(infile, str)) {
 	    istringstream iss(str);
 
@@ -31,16 +35,30 @@ public:
 	    	cout<<"iss is false in if statement"<<endl;
 	    	break;
 	    }
-	    IOProcess* process = new IOProcess(time, track);
+	    if (track>max_track){
+	    	max_track = track;
+	    }
+	    IOProcess* process = new IOProcess(time, track,id);
 	    ioProcesses.push_back(process);
 
 	    IOEvent event(time,process, "CREATED", "READY");
 	    ioQueue.push_back(event);
 	 	//cout<<"time: "<<time<<", track: "<<track<<endl; 	
+	 	++id;
 	 	}
+	 	end_track = 0;
 	 	PREV_TRACK=0;
+	 	
 	};
 	void add_process(IOProcess* p){
+		if (direction==1 && p->track>PREV_TRACK && p->track>end_track){
+			//cout<<"resetting end process in forward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
+			end_track = p->track;
+		}
+		if (direction==0 && p->track<PREV_TRACK && p->track<end_track){
+			end_track=p->track;
+			//cout<<"resetting end process in backward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
+		}
 		readyQueue.push_back(p);
 	}
 	virtual IOProcess* get_next_process(){
@@ -68,10 +86,43 @@ public:
 class SCAN : public Sched {
 public:
 	SCAN(string iFile) : Sched(iFile){
-
 	}
 	IOProcess* get_next_process(){
+		IOProcessList::iterator erasor = readyQueue.begin();
+		IOProcess* CURRENT_PROCESS;
 
+			if (PREV_TRACK == end_track){
+					direction = 1-direction;
+					//cout<<"resetting direction to "<<direction<<endl;
+			}
+		
+		if (readyQueue.size()>0){
+			int minDistance = max_track;
+			int count = 0;
+
+			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
+				//cout<<"count: "<<count++<<endl;;
+				int distance = (*i)->track-PREV_TRACK;
+				if (abs(distance)<minDistance){
+					if (direction ==1 && distance>=0){
+					erasor = i;
+					minDistance = abs(distance);
+					}
+
+					if (direction ==0 && distance<=0){
+					minDistance = abs(distance);
+					erasor = i;
+					}
+				}
+			}
+			
+			CURRENT_PROCESS = *erasor;
+			
+			readyQueue.erase(erasor);
+		}else{
+			CURRENT_PROCESS= NULL;
+		}
+		return CURRENT_PROCESS;	
 	}
 };
 
@@ -95,7 +146,7 @@ public:
 		IOProcessList::iterator erasor = readyQueue.begin();
 		IOProcess* CURRENT_PROCESS;
 		if (readyQueue.size()>0){
-			int minDistance = abs(readyQueue.front()->track-PREV_TRACK);
+			int minDistance = max_track;
 			int count = 0;
 
 			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
