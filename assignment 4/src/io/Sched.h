@@ -172,7 +172,47 @@ public:
 
 	}
 	IOProcess* get_next_process(){
+	IOProcessList::iterator erasor = readyQueue.begin();
+		IOProcess* CURRENT_PROCESS;
 
+			
+		if (readyQueue.size()>0){
+			
+			int minDistance = max_track;
+			int count = 0;
+
+			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
+				//cout<<"count: "<<count++<<endl;;
+				int distance;
+				if (PREV_TRACK==end_track){
+					//cout<<"restting distance formula"<<endl;
+					distance = (*i)->track;
+				}
+				else{
+					//cout<<"regular distance calculation"<<endl;
+					distance = (*i)->track-PREV_TRACK;
+				}
+				
+				//cout<<"distance: "<<distance<<endl;
+				if (distance<minDistance && distance>0){	
+					erasor = i;
+					minDistance = distance;
+					//cout<<"new min distance: "<<minDistance<<endl;
+				}
+			}
+			if (PREV_TRACK == end_track){
+					//cout<<"resetting end track"<<endl;
+					end_track = 0;
+					//cout<<"resetting direction to "<<direction<<endl;
+			}
+			
+			CURRENT_PROCESS = *erasor;
+			
+			readyQueue.erase(erasor);
+		}else{
+			CURRENT_PROCESS= NULL;
+		}
+		return CURRENT_PROCESS;	
 	}
 };
 
