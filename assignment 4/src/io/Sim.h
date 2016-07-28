@@ -50,7 +50,7 @@ Sim::run_simulation(){
 	float total_waittime=0;
 	float avg_waittime=0;
 	for (IOEventList::iterator i = sched->ioQueue.begin();i!=sched->ioQueue.end();++i){
-		bool TRACE = true;
+		bool TRACE = false;
 		count++;
 		if (count>50){
 			break;
@@ -64,6 +64,7 @@ Sim::run_simulation(){
 		p->time_in_prev_state = CURRENT_TIME-p->state_ts;
 		//cout<<"time in prev state: "<<p->time_in_prev_state<<endl; 
 		p->state_ts = CURRENT_TIME;
+    	//cout<<"added process. second queue size: "<<sched->activeQueue.size()<<", readyQueue size: "<<sched->readyQueue.size()<<endl;
 
     	if (i->newState =="READY"){
     	sched->add_process(p);
@@ -81,7 +82,6 @@ Sim::run_simulation(){
 			tot_movement+=abs(p->track-sched->PREV_TRACK);
 			IOEvent finishEvent(CURRENT_TIME+abs(p->track-sched->PREV_TRACK),p,"SEEK","DONE");
 			sched->PREV_TRACK = p->track;
-
           	this->insert_event(finishEvent);
 		}
 

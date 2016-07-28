@@ -12,8 +12,11 @@ public:
 	IOEventList ioQueue;
 	IOProcessList ioProcesses;
 	IOProcessList readyQueue;
+	IOProcessList activeQueue;
+
 	int PREV_TRACK;
 	int end_track;
+	int prev_end_track;
 	int max_track;
 	int direction;
 	Sched(string iFile)
@@ -47,10 +50,11 @@ public:
 	 	++id;
 	 	}
 	 	end_track = 0;
+	 	prev_end_track = 0;
 	 	PREV_TRACK=0;
 	 	
 	};
-	void add_process(IOProcess* p){
+	virtual add_process(IOProcess* p){
 		if (direction==1 && p->track>PREV_TRACK && p->track>end_track){
 			//cout<<"resetting end process in forward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
 			end_track = p->track;
@@ -91,10 +95,9 @@ public:
 		IOProcessList::iterator erasor = readyQueue.begin();
 		IOProcess* CURRENT_PROCESS;
 
-			if (PREV_TRACK == end_track){
-					direction = 1-direction;
-					//cout<<"resetting direction to "<<direction<<endl;
-			}
+		if (PREV_TRACK == end_track){
+			direction = 1-direction;
+		}
 		
 		if (readyQueue.size()>0){
 			int minDistance = max_track;
@@ -129,10 +132,66 @@ public:
 class FSCAN : public Sched {
 public:
 	FSCAN(string iFile) : Sched(iFile){
-
 	}
-	IOProcess* get_next_process(){
 
+	IOProcess* get_next_process(){
+		IOProcess* CURRENT_PROCESS;
+		//cout<<"end track: "<<end_track<<", prev_end_track: "<<prev_end_track<<endl;
+
+		if (PREV_TRACK == prev_end_track||activeQueue.size()==0){
+			direction = 1-direction;
+			//cout<<"resetting direction to "<<direction<<endl;
+			prev_end_track = end_track;
+
+		}
+
+		if (activeQueue.size()==0){
+			//cout<<"swapping queues"<<endl;
+			IOProcessList tempQueue = readyQueue;
+			readyQueue = activeQueue;
+			activeQueue = tempQueue;
+		}
+		IOProcessList::iterator erasor = activeQueue.begin();
+
+		if (activeQueue.size()>0){
+			int minDistance = max_track;
+			int count = 0;
+
+			for (IOProcessList::iterator i = activeQueue.begin();i!=activeQueue.end();++i){
+				//cout<<"count: "<<count++<<endl;;
+				int distance = (*i)->track-PREV_TRACK;
+				if (abs(distance)<minDistance){
+					if (direction ==1 && distance>=0){
+					erasor = i;
+					minDistance = abs(distance);
+					}
+
+					if (direction ==0 && distance<=0){
+					minDistance = abs(distance);
+					erasor = i;
+					}
+				}
+			}
+			CURRENT_PROCESS = *erasor;
+			
+			activeQueue.erase(erasor);
+		} else {
+			CURRENT_PROCESS= NULL;
+		}
+		//printf("next process: %p\n",CURRENT_PROCESS);
+		return CURRENT_PROCESS;	
+	}
+	add_process(IOProcess* p){
+		//note end track gets incremented in the opposite direction from SCAN and CSCAN, since it is really the inactive queue limit
+		if (direction==0 && p->track>PREV_TRACK && p->track>end_track){
+			//cout<<"resetting end process in forward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
+			end_track = p->track;
+		}
+		if (direction==1 && p->track<PREV_TRACK && p->track<end_track){
+			end_track=p->track;
+			//cout<<"resetting end process in backward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
+		}
+		readyQueue.push_back(p);
 	}
 };
 
