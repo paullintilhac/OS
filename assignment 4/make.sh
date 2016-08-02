@@ -6,7 +6,7 @@ chmod +x src/io/sched
 
 cd TestData
 
-#../src/io/sched -sc input0
+#../src/io/sched -sf input1
 
 
 #echo "************"

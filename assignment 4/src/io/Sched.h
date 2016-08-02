@@ -17,7 +17,7 @@ public:
 	int PREV_TRACK;
 	int end_track;
 	int prev_end_track;
-	int max_track;
+	int MAX_TRACK;
 	int direction;
 	Sched(string iFile)
 	{ 
@@ -38,8 +38,8 @@ public:
 	    	cout<<"iss is false in if statement"<<endl;
 	    	break;
 	    }
-	    if (track>max_track){
-	    	max_track = track;
+	    if (track>MAX_TRACK){
+	    	MAX_TRACK = track;
 	    }
 	    IOProcess* process = new IOProcess(time, track,id);
 	    ioProcesses.push_back(process);
@@ -49,6 +49,7 @@ public:
 	 	//cout<<"time: "<<time<<", track: "<<track<<endl; 	
 	 	++id;
 	 	}
+	 	//cout<<"processes size: "<<ioProcesses.size()<<", ioQueue size: "<<ioQueue.size()<<endl;
 	 	end_track = 0;
 	 	prev_end_track = 0;
 	 	PREV_TRACK=0;
@@ -94,17 +95,26 @@ public:
 	IOProcess* get_next_process(){
 		IOProcessList::iterator erasor = readyQueue.begin();
 		IOProcess* CURRENT_PROCESS;
-
+		//cout<<"PREV TRACK: "<<PREV_TRACK<<", end track: "<<end_track<<", direction: "<<direction<<endl;
+		int max_track = 0;
+		int min_track = readyQueue.front()->track;
 		if (PREV_TRACK == end_track){
+			//cout<<"resetting direction"<<endl;
 			direction = 1-direction;
 		}
 		
 		if (readyQueue.size()>0){
-			int minDistance = max_track;
+			int minDistance = MAX_TRACK;
 			int count = 0;
 
 			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
 				//cout<<"count: "<<count++<<endl;;
+				if ((*i)->track>max_track){
+					max_track = (*i)->track;
+				}
+				if ((*i)->track<min_track){
+					min_track = (*i)->track;
+				}
 				int distance = (*i)->track-PREV_TRACK;
 				if (abs(distance)<minDistance){
 					if (direction ==1 && distance>=0){
@@ -118,7 +128,15 @@ public:
 					}
 				}
 			}
-			
+		if (PREV_TRACK == end_track){
+			if (direction ==1){
+			end_track = max_track;
+			}
+			if (direction == 0){
+			end_track = min_track;
+			}
+		}	
+
 			CURRENT_PROCESS = *erasor;
 			
 			readyQueue.erase(erasor);
@@ -136,30 +154,44 @@ public:
 
 	IOProcess* get_next_process(){
 		IOProcess* CURRENT_PROCESS;
-		//cout<<"end track: "<<end_track<<", prev_end_track: "<<prev_end_track<<endl;
+		//cout<<"PREV_TRACK: "<<PREV_TRACK<<", end track: "<<end_track<<", prev_end_track: "<<prev_end_track<<", active queue size: "<<activeQueue.size()<<"ready queue size: "<<readyQueue.size()<<endl;
 
-		if (PREV_TRACK == prev_end_track||activeQueue.size()==0){
-			direction = 1-direction;
-			//cout<<"resetting direction to "<<direction<<endl;
-			prev_end_track = end_track;
-
+		if (PREV_TRACK == prev_end_track){
+			direction = 0;
+			//cout<<"resetting direction to 0"<<endl;
 		}
 
 		if (activeQueue.size()==0){
-			//cout<<"swapping queues"<<endl;
+			if (PREV_TRACK<=end_track){
+			direction = 1;
+			}else{
+			direction = 0;
+			}
+			prev_end_track = end_track;
+
+			//cout<<"swapping queues -- resetting direction to 1"<<endl;
 			IOProcessList tempQueue = readyQueue;
 			readyQueue = activeQueue;
 			activeQueue = tempQueue;
+			end_track = 0;
 		}
 		IOProcessList::iterator erasor = activeQueue.begin();
-
+		int max_track = 0;
+		int min_track = readyQueue.front()->track;
 		if (activeQueue.size()>0){
-			int minDistance = max_track;
+			int minDistance = MAX_TRACK;
 			int count = 0;
 
 			for (IOProcessList::iterator i = activeQueue.begin();i!=activeQueue.end();++i){
 				//cout<<"count: "<<count++<<endl;;
+				if ((*i)->track>max_track){
+					max_track = (*i)->track;
+				}
+				if ((*i)->track<min_track){
+					min_track = (*i)->track;
+				}
 				int distance = (*i)->track-PREV_TRACK;
+
 				if (abs(distance)<minDistance){
 					if (direction ==1 && distance>=0){
 					erasor = i;
@@ -170,8 +202,11 @@ public:
 					minDistance = abs(distance);
 					erasor = i;
 					}
+					//cout<<"new min distance: "<<minDistance<<", current track: "<<(*i)->track<<", PREV_TRACK: "<<PREV_TRACK<<" distance: "<<distance<<endl;
+
 				}
 			}
+			
 			CURRENT_PROCESS = *erasor;
 			
 			activeQueue.erase(erasor);
@@ -183,14 +218,11 @@ public:
 	}
 	add_process(IOProcess* p){
 		//note end track gets incremented in the opposite direction from SCAN and CSCAN, since it is really the inactive queue limit
-		if (direction==0 && p->track>PREV_TRACK && p->track>end_track){
+		if ( p->track>end_track){
 			//cout<<"resetting end process in forward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
 			end_track = p->track;
 		}
-		if (direction==1 && p->track<PREV_TRACK && p->track<end_track){
-			end_track=p->track;
-			//cout<<"resetting end process in backward direction: process "<<p->id<<", new end track: "<<p->track<<endl;
-		}
+	
 		readyQueue.push_back(p);
 	}
 };
@@ -205,7 +237,7 @@ public:
 		IOProcessList::iterator erasor = readyQueue.begin();
 		IOProcess* CURRENT_PROCESS;
 		if (readyQueue.size()>0){
-			int minDistance = max_track;
+			int minDistance = MAX_TRACK;
 			int count = 0;
 
 			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
@@ -215,6 +247,7 @@ public:
 					minDistance = distance;
 					erasor = i;
 				}
+				//cout<<"current track: "<<(*i)->track<<", prev track: "<<PREV_TRACK<<", distance: "<<distance<<endl;
 			}
 			CURRENT_PROCESS = *erasor;
 			readyQueue.erase(erasor);
@@ -234,14 +267,18 @@ public:
 	IOProcessList::iterator erasor = readyQueue.begin();
 		IOProcess* CURRENT_PROCESS;
 
+
 			
 		if (readyQueue.size()>0){
 			
-			int minDistance = max_track;
+			int minDistance = MAX_TRACK;
 			int count = 0;
-
+			int new_end_track=0;
 			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
-				//cout<<"count: "<<count++<<endl;;
+				//printf("ready queue pointer: %p\n",(*i));
+				if ((*i)->track>new_end_track){
+					new_end_track = (*i)->track;
+				}
 				int distance;
 				if (PREV_TRACK==end_track){
 					//cout<<"restting distance formula"<<endl;
@@ -253,15 +290,16 @@ public:
 				}
 				
 				//cout<<"distance: "<<distance<<endl;
-				if (distance<minDistance && distance>0){	
+				if (distance<minDistance && distance>=0){	
 					erasor = i;
 					minDistance = distance;
 					//cout<<"new min distance: "<<minDistance<<endl;
 				}
 			}
 			if (PREV_TRACK == end_track){
+
 					//cout<<"resetting end track"<<endl;
-					end_track = 0;
+					end_track = new_end_track;
 					//cout<<"resetting direction to "<<direction<<endl;
 			}
 			

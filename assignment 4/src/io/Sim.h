@@ -45,21 +45,22 @@ Sim::run_simulation(){
 	int count = 0;
 	int tot_movement=0;
 	int max_waittime=0;
-	float total_turnaround=0;
-	float avg_turnaround=0;
-	float total_waittime=0;
-	float avg_waittime=0;
-	for (IOEventList::iterator i = sched->ioQueue.begin();i!=sched->ioQueue.end();++i){
-		bool TRACE = false;
+	double total_turnaround=0;
+	double avg_turnaround=0;
+	double total_waittime=0;
+	double avg_waittime=0;
+   	IOEventList::iterator i = sched->ioQueue.begin();
+
+	while (i!=sched->ioQueue.end()){
+		bool TRACE =false;
 		count++;
-		if (count>50){
-			break;
-		}
+		
+		
 		//cout<<"count: "<<count<<endl;
 		CURRENT_TIME = i->timestamp;
 
 		IOProcess* p = i->process;
-		//cout<<"event info: timestamp: "<<i->timestamp<<", old state: "<<i->oldState<<", new state: "<<i->newState<<endl;
+		//cout<<"current event info: timestamp: "<<i->timestamp<<", old state: "<<i->oldState<<", new state: "<<i->newState<<", process id: "<<i->process->id<<endl;
 		//cout<<"state_ts: "<<p->state_ts<<endl;
 		p->time_in_prev_state = CURRENT_TIME-p->state_ts;
 		//cout<<"time in prev state: "<<p->time_in_prev_state<<endl; 
@@ -68,6 +69,7 @@ Sim::run_simulation(){
 
     	if (i->newState =="READY"){
     	sched->add_process(p);
+
     	if (TRACE){
     	cout<<CURRENT_TIME<<":     "<<p->id<<" add "<<p->track<<endl;
     	}
@@ -99,10 +101,10 @@ Sim::run_simulation(){
  		IOEventList::iterator iForward = i;
     	iForward++;
     	int nextTime = iForward->timestamp;
-
     	if (CALL_SCHEDULER){
 	    	if (nextTime==i->timestamp&&iForward != sched->ioQueue.end()){
 	        //cout<<"encountered the same time stamp, advancing forward..."<<endl;
+	    	sched->ioQueue.erase(i++);
 	        continue;
 	      	}
 	      	CALL_SCHEDULER = false;
@@ -111,20 +113,28 @@ Sim::run_simulation(){
 	      	   CURRENT_RUNNING_PROCESS=sched->get_next_process();
 	      	   //printf("just got current running process: %p\n",CURRENT_RUNNING_PROCESS);
 	           if (CURRENT_RUNNING_PROCESS == NULL){
+	           	//cout<<"current process is still null, continue..."<<endl;
+	           	sched->ioQueue.erase(i++);
+
 	            //downTime+=nextTime-CURRENT_TIME;
 	            continue;
 	           }
 	           if (TRACE){
 	           	cout<<CURRENT_TIME<<":     "<<CURRENT_RUNNING_PROCESS->id<<" issue "<<CURRENT_RUNNING_PROCESS->track<<" "<<sched->PREV_TRACK<<endl;
 	           }
-
 	           IOEvent seekEvent(i->timestamp,CURRENT_RUNNING_PROCESS,"READY","SEEK");
+
 	           this->insert_event(seekEvent);
-	           
+				
 	      	}
     	}
+    	sched->ioQueue.erase(i++);
+    
+    	//for (IOEventList::iterator j = sched->ioQueue.begin();j!=sched->ioQueue.end();++j){
+		//			cout<<"timestamp: "<<j->timestamp<<", process: "<<j->process->id<<", end state: "<<j->newState<<endl;
+		//}
+		//cout<<"later event info: timestamp: "<<i->timestamp<<", old state: "<<i->oldState<<", new state: "<<i->newState<<", process id: "<<i->process->id<<endl;
 
-		//cout<<"PREV_TRACK: "<<sched->PREV_TRACK<<endl;
 	}
 	avg_turnaround = total_turnaround/sched->ioProcesses.size();
 	avg_waittime = total_waittime/sched->ioProcesses.size();
