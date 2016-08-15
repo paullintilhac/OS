@@ -15,9 +15,8 @@ DES::DES(string originFile, Rand* r,Scheduler* s){
 	string str;
   int pCount=0;
 	while (getline(infile, str)) {
-	     
 	    istringstream iss(str);
-
+   
 	    int AT,TC,CB,IO;
 	    if (!(iss >> AT >> TC>>CB>>IO)) { 
 	    	//cout<<"breaking out of while loop \n"; 
@@ -26,8 +25,9 @@ DES::DES(string originFile, Rand* r,Scheduler* s){
       if (pCount==0){
         this->START_TIME = AT;
       }
+
       int myRand = r->myrandom(4);
-     
+
 		  Process *p=new Process(AT,TC,CB,IO,myRand,pCount);
       this->processes.push_back(p);
       stringstream ss;
@@ -61,24 +61,25 @@ DES::insert_event(Event e){
 }
 
 DES::run_simulation(bool verbose){
-
 int count = 0;
 int finalTime=0;
-int downTime = 0;
+double downTime = 0;
 Process* CURRENT_RUNNING_PROCESS =0;
-int ioCount=0;
-int ioTime=0;
+double ioCount=0;
+double ioTime=0;
 for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
     Process* p = i->process;
     this->CURRENT_TIME = i->timestamp;
     p->timeInPrevState = CURRENT_TIME-p->state_ts;
+    //verboseSummary<<"count: "<<(count)<<", timestamp: "<<CURRENT_TIME<<" state_ts: "<<p->state_ts<<" , old state: "<<i->oldState<<", new state: "<<i->newState<<", process pointer: "<<p<<endl;
+    //cout<<"time in prev state: "<<p->timeInPrevState<<endl;
     p->state_ts = this->CURRENT_TIME;
     
 
-    
-       //cout<<endl;
+    //verboseSummary<<"ready queue size: "<<sched->readyQueue.size()<<endl;
+    //verboseSummary<<"# invocations of randomizer: "<<rand->randCount<<endl;
+        //cout<<endl;
         count++;
-        //cout<<"count: "<<(count)<<", old state: "<<i->oldState<<", new state: "<<i->newState<<", process pointer: "<<p<<endl;
     if (i->oldState == "READY"){
       p->totalWaitTime+=p->timeInPrevState;
     }
@@ -101,7 +102,7 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
       ioCount--;
       p->totalIOTime+=p->timeInPrevState;
     }
-      
+     
 
     if (count!=1){
     EventList::iterator iLookback = i;
@@ -116,32 +117,35 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
         //cout<<"adding process to run queue"<<endl;
         if (p->remainingExecTime>0){
           sched->add_process(p);
-          CALL_SCHEDULER=true;
         }
+          CALL_SCHEDULER=true;
+
         if (i->oldState!="CREATED")
           this->verboseSummary<<endl;
     }
 
     //going from ready to run
     if (i->newState == "RUNNG"){
-        int myRand = rand->myrandom(p->CB);
+        int myRand;
+        //verboseSummary<<"myrand for CB: "<<myRand<<endl;
         if (p->remainingCB==0){
-          //cout<<"saving myRandom as remaining CB: "<<myRand<<endl;
+          //verboseSummary<<"saving myRandom as remaining CB: "<<myRand<<endl;
+          myRand = rand->myrandom(p->CB);
           p->remainingCB = myRand;
         } else {
-          //cout<<"using remaining time as CB: "<<p->remainingCB<<endl;
+          //verboseSummary<<"using remaining time as CB: "<<p->remainingCB<<endl;
           myRand = p->remainingCB;
         }
-        if (p->remainingExecTime<myRand)
+        if (p->remainingExecTime<myRand){
           myRand = p->remainingExecTime;
-
-        if (this->sched->quantum<myRand){
-            Event runEvent(CURRENT_TIME+myRand,p,"RUNNG","READY");
-            this->insert_event(runEvent);
+          //cout<<"saving myrand as remaining exec time: "<<myRand<<endl;
         }
-        else{
-            Event runEvent(CURRENT_TIME+myRand,p,"RUNNG","BLOCK");
-            this->insert_event(runEvent);
+        if (this->sched->quantum<myRand){
+          Event runEvent(CURRENT_TIME+sched->quantum,p,"RUNNG","READY");
+          this->insert_event(runEvent);            
+        } else{
+        Event runEvent(CURRENT_TIME+myRand,p,"RUNNG","BLOCK");
+        this->insert_event(runEvent);
         }
         this->verboseSummary<<" cb="<<myRand<<" rem="<<p->remainingExecTime<<" prio="<<p->dynamic_priority<<endl;
     }
@@ -152,6 +156,7 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
           finalTime = CURRENT_TIME;
         } else {
           int myRand = rand->myrandom(p->IO);
+          //verboseSummary<<"myRand for IB: "<<myRand<<endl;
           Event blockEvent(CURRENT_TIME+myRand,p,"BLOCK","READY");
           this->insert_event(blockEvent);
           this->verboseSummary<<" ib="<<myRand<<" rem="<<p->remainingExecTime<<endl;
@@ -169,7 +174,7 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
       if (CALL_SCHEDULER){
       
        if (nextTime==i->timestamp&&iForward != this->events.end()){
-        //cout<<"encountered the same time stamp, advancing forward..."<<endl;
+        //verboseSummary<<"encountered the same time stamp, advancing forward..."<<endl;
         continue;
        }
        CALL_SCHEDULER = false;
@@ -179,6 +184,7 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
            sched->get_next_process();
            CURRENT_RUNNING_PROCESS = sched->CURRENT_PROCESS;
            if (CURRENT_RUNNING_PROCESS == 0){
+            //verboseSummary<<"process still null"<<endl;
             downTime+=nextTime-CURRENT_TIME;
             continue;
            }
@@ -192,11 +198,13 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
       ioTime+=nextTime-CURRENT_TIME;
     }
 }
-    int avgTT=0;
-    int avgWait=0;
+    double avgTT=0;
+    double avgWait=0;
+    int counter = 0;
     for (ProcessList::iterator p = this->processes.begin();p != this->processes.end();++p){
         avgTT+=(*p)->TT;
         avgWait+=(*p)->totalWaitTime;
+        cout<<"count: "<<++counter<<", avgTT: "<<avgTT<<", avgWait: "<<avgWait<<endl;
         stringstream ss;
         ss << setw(4) << setfill('0') << (*p)->pCount;
         string s = ss.str();        
@@ -207,13 +215,24 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
         //cout<<"summary string being created: "<<summaryStream.str()<<endl;
         this->processSummary<<summaryStream.str();
     }
-    avgTT/=this->processes.size();
-    avgWait/=this->processes.size();
+    cout<<"processes size: "<<processes.size()<<endl;
+    double processSize = processes.size();
+    cout<<"avgTT: "<<avgTT<<endl;
+    avgTT/=processSize;
+    cout<<"avgTT: "<<avgTT<<endl;
+    avgWait/=processSize;
+
 if (verbose){
     cout<<this->verboseSummary.str()<<endl;
 }
     cout<<this->sched->schedulerAlgo<<endl;
     cout<<this->processSummary.str();
-    printf("SUM: %d %.2lf %.2lf %.2lf %.2lf %.3lf\n",finalTime,((finalTime-this->START_TIME-downTime)/(finalTime-this->START_TIME)),ioTime/(finalTime-this->START_TIME),avgTT,(this->processes.size()/finalTime));
+    printf("SUM: %d %.2lf %.2lf %.2lf %.2lf %.3lf\n",
+      finalTime,
+      (finalTime-downTime)/finalTime,
+      ioTime/(finalTime),
+      avgTT,
+      avgWait,
+      100*processSize/(double)finalTime);
     //cout<<"SUM: "<<<<" "<<<<" "<<<<" "<<<<" "<<;
 }

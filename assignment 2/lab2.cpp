@@ -83,7 +83,7 @@ sched = new PRIO(quantum); //placeholder for now
 
 DES des(argv[numOptions+1],&rand,sched);
 des.run_simulation(verbose);
-
+cout<<"finished main function"<<endl;
 return 0;
 }
  

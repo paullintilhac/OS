@@ -241,13 +241,11 @@ public:
 			int count = 0;
 
 			for (IOProcessList::iterator i = readyQueue.begin();i!=readyQueue.end();++i){
-				//cout<<"count: "<<count++<<endl;;
 				int distance = abs((*i)->track-PREV_TRACK);
 				if (distance<minDistance){
 					minDistance = distance;
 					erasor = i;
 				}
-				//cout<<"current track: "<<(*i)->track<<", prev track: "<<PREV_TRACK<<", distance: "<<distance<<endl;
 			}
 			CURRENT_PROCESS = *erasor;
 			readyQueue.erase(erasor);
@@ -282,25 +280,23 @@ public:
 				int distance;
 				if (PREV_TRACK==end_track){
 					//cout<<"restting distance formula"<<endl;
-					distance = (*i)->track;
+					if (end_track!=(*i)->track){
+					distance = (*i)->track;}
+					else{distance = 0;} //need to handle special case of when there is a repeated end track
 				}
 				else{
 					//cout<<"regular distance calculation"<<endl;
 					distance = (*i)->track-PREV_TRACK;
 				}
 				
-				//cout<<"distance: "<<distance<<endl;
 				if (distance<minDistance && distance>=0){	
 					erasor = i;
 					minDistance = distance;
-					//cout<<"new min distance: "<<minDistance<<endl;
 				}
 			}
 			if (PREV_TRACK == end_track){
 
-					//cout<<"resetting end track"<<endl;
 					end_track = new_end_track;
-					//cout<<"resetting direction to "<<direction<<endl;
 			}
 			
 			CURRENT_PROCESS = *erasor;

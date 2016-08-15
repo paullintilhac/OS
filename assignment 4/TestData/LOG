@@ -1,4 +1,1 @@
 gradeit.sh myout . ./LOG
-diff -b -q myout/out_9_c ./out_9_c failed
-   DIR1-SUM ==> SUM: 25207 25206 473.97 423.56 1262
-   DIR2-SUM ==> SUM: 25207 25206 473.28 422.87 1262

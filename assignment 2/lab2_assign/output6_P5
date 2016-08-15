@@ -1,12 +1,189 @@
+about to construct DES
+origin file: input6
+string: 000 400  50  50
+hello1
+hello2
+hello3
+AT: 0, TC: 400, CB: 50, IO: 50
+string: 000 300  40  40
+hello1
+hello2
+hello3
+AT: 0, TC: 300, CB: 40, IO: 40
+string: 001 200  30  50
+hello1
+hello2
+hello3
+AT: 1, TC: 200, CB: 30, IO: 50
+string: 001 301  20  10
+hello1
+hello2
+hello3
+AT: 1, TC: 301, CB: 20, IO: 10
+string: 009 302  20  20
+hello1
+hello2
+hello3
+AT: 9, TC: 302, CB: 20, IO: 20
+string: 010 303  15  30 
+hello1
+hello2
+hello3
+AT: 10, TC: 303, CB: 15, IO: 30
+string: 010 304  05  40
+hello1
+hello2
+hello3
+AT: 10, TC: 304, CB: 5, IO: 40
+string: 011 305  20  40
+hello1
+hello2
+hello3
+AT: 11, TC: 305, CB: 20, IO: 40
+string: 020 306  20  10
+hello1
+hello2
+hello3
+AT: 20, TC: 306, CB: 20, IO: 10
+string: 050 307  20  10
+hello1
+hello2
+hello3
+AT: 50, TC: 307, CB: 20, IO: 10
+count: 1, old state: CREATED, new state: READY, process pointer: 0x600022eb0
+count: 2, old state: CREATED, new state: READY, process pointer: 0x600022a50
+count: 3, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 4, old state: CREATED, new state: READY, process pointer: 0x60005bb60
+count: 5, old state: CREATED, new state: READY, process pointer: 0x60005bca0
+count: 6, old state: CREATED, new state: READY, process pointer: 0x60005bfc0
+count: 7, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 8, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 9, old state: CREATED, new state: READY, process pointer: 0x60005c160
+count: 10, old state: CREATED, new state: READY, process pointer: 0x60005c260
+count: 11, old state: CREATED, new state: READY, process pointer: 0x60005c3d0
+count: 12, old state: CREATED, new state: READY, process pointer: 0x60005c500
+count: 13, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 14, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 15, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 16, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 17, old state: RUNNG, new state: BLOCK, process pointer: 0x600022a50
+count: 18, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 19, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bca0
+count: 20, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 21, old state: BLOCK, new state: READY, process pointer: 0x60005bca0
+count: 22, old state: CREATED, new state: READY, process pointer: 0x60005c620
+count: 23, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 24, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 25, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 26, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 27, old state: BLOCK, new state: READY, process pointer: 0x600022a50
+count: 28, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 29, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 30, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 31, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 32, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 33, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 34, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 35, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 36, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 37, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 38, old state: RUNNG, new state: BLOCK, process pointer: 0x600022a50
+count: 39, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 40, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bfc0
+count: 41, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 42, old state: BLOCK, new state: READY, process pointer: 0x60005bfc0
+count: 43, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 44, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 45, old state: BLOCK, new state: READY, process pointer: 0x600022a50
+count: 46, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 47, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 48, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bca0
+count: 49, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 50, old state: RUNNG, new state: BLOCK, process pointer: 0x600022a50
+count: 51, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 52, old state: BLOCK, new state: READY, process pointer: 0x60005bca0
+count: 53, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 54, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 55, old state: BLOCK, new state: READY, process pointer: 0x600022a50
+count: 56, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 57, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 58, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 59, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 60, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 61, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 62, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 63, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 64, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 65, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 66, old state: RUNNG, new state: BLOCK, process pointer: 0x600022a50
+count: 67, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 68, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bca0
+count: 69, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 70, old state: BLOCK, new state: READY, process pointer: 0x60005bca0
+count: 71, old state: BLOCK, new state: READY, process pointer: 0x600022a50
+count: 72, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 73, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 74, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 75, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 76, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 77, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 78, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 79, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 80, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 81, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 82, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 83, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 84, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bfc0
+count: 85, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 86, old state: BLOCK, new state: READY, process pointer: 0x60005bfc0
+count: 87, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 88, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 89, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 90, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 91, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bfc0
+count: 92, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 93, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bca0
+count: 94, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 95, old state: BLOCK, new state: READY, process pointer: 0x60005bfc0
+count: 96, old state: BLOCK, new state: READY, process pointer: 0x60005bca0
+count: 97, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 98, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 99, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 100, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 101, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 102, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 103, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 104, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 105, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 106, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 107, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 108, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 109, old state: RUNNG, new state: BLOCK, process pointer: 0x600022a50
+count: 110, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 111, old state: BLOCK, new state: READY, process pointer: 0x600022a50
+count: 112, old state: RUNNG, new state: READY, process pointer: 0x60005bfc0
+count: 113, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 114, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 115, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 116, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 117, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 118, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bfc0
+count: 119, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 120, old state: BLOCK, new state: READY, process pointer: 0x60005bfc0
+count: 121, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 122, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 123, old state: RUNNG, new state: READY, process pointer: 0x600022a50
+count: 124, old state: READY, new state: RUNNG, process pointer: 0x60005bfc0
+count: 125, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bfc0
+count: 126, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 127, old state: RUNNG, new state: BLOCK, process pointer: 0x60005bca0
+count: 128, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 129, old state: BLOCK, new state: READY, process pointer: 0x60005bca0
+count: 130, old state: RUNNG, new state: BLOCK, process pointer: 0x600022a50
+count: 131, old state: READY, new state: RUNNG, process pointer: 0x60005bca0
+count: 132, old state: BLOCK, new state: READY, process pointer: 0x600022a50
+count: 133, old state: BLOCK, new state: READY, process pointer: 0x60005bfc0
+count: 134, old state: RUNNG, new state: READY, process pointer: 0x60005bca0
+count: 135, old state: READY, new state: RUNNG, process pointer: 0x600022a50
+count: 136, old state: RUNNG, new state: READY, process pointer: 0x600022a50
 PRIO 5
-0000:    0  400   50   50 2 |  2979  2979   358  2221
-0001:    0  300   40   40 4 |  1840  1840   323  1217
-0002:    1  200   30   50 2 |  2376  2375   207  1968
-0003:    1  301   20   10 4 |  1206  1205   121   783
-0004:    9  302   20   20 4 |  1339  1330   298   730
-0005:   10  303   15   30 1 |  3158  3148   525  2320
-0006:   10  304    5   40 3 |  2652  2642  1944   394
-0007:   11  305   20   40 3 |  2371  2360   661  1394
-0008:   20  306   20   10 3 |  2188  2168   127  1735
-0009:   50  307   20   10 1 |  2990  2940   158  2475
-SUM: 3158 95.88 85.15 2298.70 1523.70 0.317

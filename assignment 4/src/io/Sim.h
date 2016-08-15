@@ -54,8 +54,7 @@ Sim::run_simulation(){
 	while (i!=sched->ioQueue.end()){
 		bool TRACE =false;
 		count++;
-		
-		
+
 		//cout<<"count: "<<count<<endl;
 		CURRENT_TIME = i->timestamp;
 
@@ -136,6 +135,7 @@ Sim::run_simulation(){
 		//cout<<"later event info: timestamp: "<<i->timestamp<<", old state: "<<i->oldState<<", new state: "<<i->newState<<", process id: "<<i->process->id<<endl;
 
 	}
+	//cout<<"total turnaround: "<<total_turnaround<<", num processes: "<<sched->ioProcesses.size()<<endl;
 	avg_turnaround = total_turnaround/sched->ioProcesses.size();
 	avg_waittime = total_waittime/sched->ioProcesses.size();
 	printf("SUM: %d %d %.2lf %.2lf %d\n",
