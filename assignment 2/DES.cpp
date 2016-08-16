@@ -73,23 +73,26 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
     lastTime = CURRENT_TIME;
     this->CURRENT_TIME = i->timestamp;
     p->timeInPrevState = CURRENT_TIME-p->state_ts;
-    //verboseSummary<<"count: "<<(count)<<", timestamp: "<<CURRENT_TIME<<" state_ts: "<<p->state_ts<<" , old state: "<<i->oldState<<", new state: "<<i->newState<<", process pointer: "<<p<<endl;
+    //cout<<"count: "<<(count)<<", timestamp: "<<CURRENT_TIME<<" state_ts: "<<p->state_ts<<" , old state: "<<i->oldState<<", new state: "<<i->newState<<", process pointer: "<<p<<", dynamic priority: "<<p->dynamic_priority<<endl;
     //cout<<"time in prev state: "<<p->timeInPrevState<<endl;
     p->state_ts = this->CURRENT_TIME;
     
-
     //verboseSummary<<"ready queue size: "<<sched->readyQueue.size()<<endl;
     //verboseSummary<<"# invocations of randomizer: "<<rand->randCount<<endl;
         //cout<<endl;
         count++;
-    if (i->oldState == "READY"){
-      p->totalWaitTime+=p->timeInPrevState;
-    }
-    //cout<<"remaining CB at top: "<<p->remainingCB<<", timeInPrevState: "<<p->timeInPrevState<<endl;
 
+    if (i->oldState == "READY"){
+      p->totalWaitTime+= p->timeInPrevState;     
+
+    }
+
+    //cout<<"remaining CB at top: "<<p->remainingCB<<", timeInPrevState: "<<p->timeInPrevState<<endl;
     if (i->oldState == "RUNNG"){
+
       CURRENT_RUNNING_PROCESS=0;
       sched->CURRENT_PROCESS = 0;
+
       //verboseSummary<<"decrementing remaining cb: "<<p->remainingCB<<" by tps: "<<p->timeInPrevState<<endl;
       p->remainingExecTime -= p->timeInPrevState;
       p->remainingCB -= p->timeInPrevState;
@@ -100,6 +103,8 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
       }
       //cout<<"resetting current running process to "<<CURRENT_RUNNING_PROCESS<<endl;
     }
+    //verboseSummary<<"hello -- old state: "<<i->oldState<<endl;
+    //verboseSummary<<"new state: "<<i->newState<<endl;
     if (i->oldState!="CREATED" && p->remainingExecTime!=0){
       this->verboseSummary<<CURRENT_TIME<<" "<<p->pCount<<" "<<p->timeInPrevState<<": "<< i->oldState<<" -> "<<i->newState;
     }
@@ -116,22 +121,31 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
     }
 
     if (i->oldState=="BLOCK"){
+      p->dynamic_priority = p->static_priority-1;
       ioCount--;
       p->totalIOTime+=p->timeInPrevState;
     }
     
-    //going from created to ready
+    //going from created/running to ready
     if (i->newState =="READY"){
-        if (p->remainingExecTime>0){
-          sched->add_process(p);
-        }
-          CALL_SCHEDULER=true;
-
         if (i->oldState!="CREATED"&& i->oldState!="BLOCK")
           this->verboseSummary<<" cb="<<p->remainingCB<<" rem="<<p->remainingExecTime<<" prio="<<p->dynamic_priority<<endl;
         if (i->oldState == "BLOCK"){
           verboseSummary<<endl;
+        }    
+        if (i->oldState == "RUNNG"){
+            p->dynamic_priority--;
         }
+
+        if (p->remainingExecTime>0){
+          sched->add_process(p);
+        }
+
+          CALL_SCHEDULER=true;
+
+       
+
+        
     }
 
     //going from ready to run
@@ -147,7 +161,7 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
           myRand = p->remainingExecTime;
           p->remainingCB = myRand;
         }
-        if (this->sched->quantum<myRand){
+        if (sched->quantum<myRand){
           Event runEvent(CURRENT_TIME+sched->quantum,p,"RUNNG","READY");
           this->insert_event(runEvent);            
         } else{
@@ -203,7 +217,6 @@ for (EventList::iterator i=this->events.begin();i != this->events.end();++i){
        //cout<<"process remaining cb: "<<p->remainingCB<<endl;
        //cout<<"run event old state: "<< runEvent.oldState<<", run event new state: "<<runEvent.newState<<", process pointer: "<<runEvent.process<<endl;
     }
-    
 }
     double avgTT=0;
     double avgWait=0;

@@ -5,7 +5,6 @@ using namespace std;
 
 Scheduler::add_process(Process *p){
     this->readyQueue.push_back(p);
-   
 }
 
 Scheduler::mapProcess(Process* p){
@@ -19,10 +18,8 @@ Scheduler::mapProcess(Process* p){
 			//	p->dynamic_priority=p->static_priority-1;
 			//}
 		}
-	
 
 		if (bm->bitmap[p->dynamic_priority].flag==false){
-			//cout<<"setting flag for priority "<<p->dynamic_priority<<endl;
 			bm->bitmap[p->dynamic_priority].flag=true;
 		}
 		
@@ -32,7 +29,6 @@ Scheduler::mapProcess(Process* p){
 
 
 Scheduler::unmapProcess(Process* p){
-		
 		
 		this->active.bitmap[p->dynamic_priority].pList.pop_front();
 		//cout<<"after popping front"<<endl;

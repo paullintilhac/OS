@@ -154,7 +154,6 @@ class PRIO : public Scheduler{
 		    	CURRENT_PROCESS = 0;
 		    }
 		    else{
-
 		    	CURRENT_PROCESS = this->active.bitmap[maxPriority].pList.front();
 		    	unmapProcess(CURRENT_PROCESS);
 		    	
